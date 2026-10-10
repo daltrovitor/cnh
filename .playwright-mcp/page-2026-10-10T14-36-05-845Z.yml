@@ -1,0 +1,9 @@
+- generic [active] [ref=e1]:
+  - main [ref=e3]:
+    - generic [ref=e4]:
+      - heading "Campus Digital" [level=1] [ref=e5]
+      - paragraph [ref=e6]: Sua carteirinha de estudante no celular.
+    - generic [ref=e7]:
+      - button "Carregando…" [disabled] [ref=e14] [cursor=pointer]
+      - alert
+  - alert [ref=e15]

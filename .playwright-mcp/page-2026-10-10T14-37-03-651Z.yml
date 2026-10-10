@@ -1,0 +1,9 @@
+- generic [active] [ref=f2e1]:
+  - main [ref=f2e3]:
+    - generic [ref=f2e4]:
+      - heading "Campus Digital" [level=1] [ref=f2e5]
+      - paragraph [ref=f2e6]: Sua carteirinha de estudante no celular.
+    - generic [ref=f2e7]:
+      - button "Entrar com biometria" [ref=f2e14] [cursor=pointer]
+      - alert
+  - alert [ref=f2e15]
