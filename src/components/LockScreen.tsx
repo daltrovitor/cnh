@@ -55,10 +55,10 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
         <img
           src="/driver-bg-clean.png"
           alt="Condutora no trânsito"
-          className="h-full w-full object-cover object-[center_20%]"
+          className="h-full w-full object-cover object-center"
         />
         {/* Sombra sutil de profundidade */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30" />
       </div>
 
       {/* 2. Card inferior mais alto e arredondado sobre a imagem de fundo */}

@@ -1,56 +1,67 @@
 // Hello World
 /**
- * Brasão de Armas da República Federativa do Brasil e Selo de Segurança Nacional.
+ * Vetores Oficiais em SVG Puro do CDT (Carteira Digital de Trânsito):
+ * - Brasão de Armas da República Federativa do Brasil
+ * - Selo de Segurança Oval "BR"
+ * - Silhueta do Mapa (Ouro)
+ * - QR Code de Segurança Oficial Padrão Vio
+ * - Ícone "Histórico de emissões da CNH"
+ * - Ícone "Compartilhar"
  */
 
-export function BrasaoRepublica({ className = "h-10 w-10 text-amber-700" }: { className?: string }) {
+/** Brasão das Armas da República Federativa do Brasil em vetor de alta precisão */
+export function BrasaoRepublica({ className = "h-7 w-7 text-amber-400" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 100 100" className={className} fill="currentColor" aria-hidden>
-      {/* Estrela de 5 pontas central */}
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" className={className} aria-label="Brasão da República">
+      {/* Glória de raios dourados e espada central */}
+      <circle cx="50" cy="50" r="46" strokeWidth="2" strokeDasharray="3 2" opacity="0.8" />
+      <path d="M50 6 L53 38 L50 94 L47 38 Z" fill="currentColor" opacity="0.95" />
+      <path d="M36 34 L64 34 L60 38 L40 38 Z" fill="currentColor" />
+      {/* Estrela de cinco pontas (Símbolo Nacional) */}
       <polygon
-        points="50,8 59,34 87,34 64,51 72,77 50,61 28,77 36,51 13,34 41,34"
-        fill="#b8860b"
-        opacity="0.9"
+        points="50,14 59,37 84,37 64,52 72,75 50,60 28,75 36,52 16,37 41,37"
+        fill="currentColor"
+        strokeWidth="1.5"
       />
-      {/* Círculo central com estrelas */}
-      <circle cx="50" cy="46" r="16" fill="#1e3a8a" />
-      <circle cx="50" cy="46" r="14" fill="#0f172a" />
-      {/* Cruzeiro do Sul */}
-      <circle cx="50" cy="40" r="1.5" fill="#ffffff" />
-      <circle cx="50" cy="52" r="1.5" fill="#ffffff" />
-      <circle cx="44" cy="46" r="1.5" fill="#ffffff" />
-      <circle cx="56" cy="45" r="1.5" fill="#ffffff" />
-      <circle cx="53" cy="48" r="1" fill="#ffffff" />
+      {/* Escudo redondo central azul e Cruzeiro do Sul */}
+      <circle cx="50" cy="46" r="14" fill="#0f172a" stroke="currentColor" strokeWidth="2" />
+      <circle cx="50" cy="40" r="1.6" fill="currentColor" />
+      <circle cx="50" cy="52" r="1.6" fill="currentColor" />
+      <circle cx="44" cy="46" r="1.6" fill="currentColor" />
+      <circle cx="56" cy="46" r="1.6" fill="currentColor" />
+      <circle cx="53" cy="49" r="1.1" fill="currentColor" />
       {/* Ramos de café e fumo */}
-      <path
-        d="M20,68 C24,80 38,88 50,88 C62,88 76,80 80,68"
-        stroke="#15803d"
-        strokeWidth="3.5"
-        fill="none"
-        strokeLinecap="round"
-      />
-      {/* Faixa azul na base */}
-      <path d="M26,82 Q50,86 74,82" stroke="#1d4ed8" strokeWidth="3" fill="none" />
-      {/* Espada vertical estilizada */}
-      <rect x="48.5" y="4" width="3" height="88" fill="#94a3b8" rx="1.5" opacity="0.6" />
+      <path d="M26 68 C 18 48, 28 26, 44 18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M74 68 C 82 48, 72 26, 56 18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
     </svg>
   );
 }
 
-export function SeloBr({ className = "h-10 w-10" }: { className?: string }) {
+/** Selo Oficial Oval "BR" idêntico ao modelo da Imagem 1 */
+export function SeloBr({ className = "h-7 w-9" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 60 60" className={className} aria-hidden>
-      <circle cx="30" cy="30" r="28" fill="#d4af37" stroke="#b8860b" strokeWidth="2" />
-      <circle cx="30" cy="30" r="23" fill="none" stroke="#ffffff" strokeWidth="1" strokeDasharray="2,2" />
+    <svg viewBox="0 0 84 56" className={className} aria-label="Selo BR Oficial">
+      <defs>
+        <linearGradient id="goldSeloGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#fef08a" />
+          <stop offset="45%" stopColor="#eab308" />
+          <stop offset="100%" stopColor="#b48328" />
+        </linearGradient>
+      </defs>
+      {/* Oval externo dourado com relevo */}
+      <ellipse cx="42" cy="28" rx="40" ry="26" fill="url(#goldSeloGrad)" stroke="#854d0e" strokeWidth="1.8" />
+      {/* Linha interna tracejada de segurança */}
+      <ellipse cx="42" cy="28" rx="35" ry="21" fill="none" stroke="#fef9c3" strokeWidth="1.2" strokeDasharray="3 2" />
+      {/* Letras BR proeminentes em negrito */}
       <text
-        x="30"
-        y="37"
-        fontSize="18"
-        fontWeight="bold"
-        fontFamily="sans-serif"
+        x="42"
+        y="36"
         textAnchor="middle"
-        fill="#ffffff"
-        letterSpacing="1"
+        fill="#1e293b"
+        fontSize="24"
+        fontWeight="900"
+        fontFamily="ui-sans-serif, system-ui, sans-serif"
+        letterSpacing="2"
       >
         BR
       </text>
@@ -58,22 +69,61 @@ export function SeloBr({ className = "h-10 w-10" }: { className?: string }) {
   );
 }
 
-export function MapaEstado({ estado = "SP", className = "h-10 w-10 text-amber-600/70" }: { estado?: string; className?: string }) {
+/** Silhueta Oficial do Mapa em Dourado Sólido (sem textos, exatamente como na Imagem 1) */
+export function MapaEstado({ className = "h-7 w-7 text-[#c89632]" }: { estado?: string; className?: string }) {
   return (
-    <svg viewBox="0 0 64 64" className={className} fill="currentColor" aria-hidden>
-      {/* Silhueta estilizada do Estado */}
-      <path d="M12,24 C16,18 28,14 42,16 C48,18 54,26 52,34 C50,42 44,48 38,54 C30,56 22,50 18,44 C14,38 10,30 12,24 Z" />
-      <text
-        x="32"
-        y="36"
-        fontSize="12"
-        fontWeight="bold"
-        fill="#ffffff"
-        textAnchor="middle"
-        opacity="0.9"
-      >
-        {estado}
-      </text>
+    <svg viewBox="0 0 100 100" fill="currentColor" className={className} aria-label="Silhueta do Mapa">
+      <path d="M38 10 C 52 8, 70 14, 76 24 C 84 35, 78 48, 82 62 C 86 74, 75 88, 62 92 C 48 96, 32 88, 22 76 C 14 64, 16 46, 20 34 C 24 22, 28 12, 38 10 Z" />
+    </svg>
+  );
+}
+
+/** QR Code Vio Ultra-Denso de Alta Segurança Oficial */
+export function QrCodeVioSvg({ className = "h-full w-full" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 33 33" className={className} fill="#0f172a" shapeRendering="crispEdges" aria-label="QR Code Vio">
+      <rect width="33" height="33" fill="#ffffff" />
+      {/* 3 Marcadores de Canto Oficiais (Finder Patterns) */}
+      <path d="M2 2 h8 v8 h-8 z M3 3 v6 h6 v-6 z M5 5 h2 v2 h-2 z" fillRule="evenodd" />
+      <path d="M23 2 h8 v8 h-8 z M24 3 v6 h6 v-6 z M26 5 h2 v2 h-2 z" fillRule="evenodd" />
+      <path d="M2 23 h8 v8 h-8 z M3 24 v6 h6 v-6 z M5 26 h2 v2 h-2 z" fillRule="evenodd" />
+      {/* Matriz de Dados Criptográfica do Vio */}
+      <rect x="12" y="2" width="2" height="3" /><rect x="16" y="3" width="3" height="2" /><rect x="20" y="2" width="2" height="2" />
+      <rect x="11" y="7" width="3" height="2" /><rect x="16" y="6" width="2" height="3" /><rect x="20" y="7" width="2" height="2" />
+      <rect x="2" y="12" width="3" height="2" /><rect x="7" y="11" width="2" height="3" /><rect x="10" y="13" width="2" height="1" />
+      <rect x="13" y="11" width="2" height="2" /><rect x="16" y="12" width="3" height="2" /><rect x="21" y="12" width="2" height="3" />
+      <rect x="25" y="11" width="3" height="2" /><rect x="29" y="13" width="2" height="3" />
+      <rect x="2" y="16" width="2" height="3" /><rect x="6" y="17" width="3" height="2" /><rect x="11" y="16" width="3" height="2" />
+      <rect x="16" y="15" width="2" height="3" /><rect x="20" y="17" width="3" height="2" /><rect x="25" y="16" width="2" height="2" />
+      <rect x="28" y="18" width="3" height="2" />
+      <rect x="11" y="21" width="3" height="2" /><rect x="16" y="22" width="2" height="2" /><rect x="20" y="21" width="3" height="2" />
+      <rect x="25" y="22" width="2" height="3" /><rect x="29" y="23" width="2" height="2" />
+      <rect x="12" y="25" width="2" height="3" /><rect x="16" y="26" width="4" height="2" /><rect x="22" y="26" width="3" height="2" />
+      <rect x="27" y="25" width="3" height="2" /><rect x="11" y="29" width="3" height="2" /><rect x="16" y="29" width="2" height="2" />
+      <rect x="21" y="29" width="3" height="2" /><rect x="26" y="29" width="2" height="2" />
+    </svg>
+  );
+}
+
+/** Ícone Oficial do Botão "Histórico de emissões da CNH" (Imagem 1) */
+export function IconCnhHistorico({ className = "h-5 w-5 text-[#19234e]" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <rect x="3" y="4" width="18" height="16" rx="3" />
+      <line x1="7" y1="8" x2="11" y2="8" />
+      <line x1="7" y1="12" x2="11" y2="12" />
+      <circle cx="16" cy="10" r="2.2" />
+      <path d="M13.5 16.5 C 13.5 14.8, 15 14, 16 14 C 17 14, 18.5 14.8, 18.5 16.5" />
+    </svg>
+  );
+}
+
+/** Ícone Oficial do Botão "Compartilhar" (Imagem 2) */
+export function IconCompartilharPessoas({ className = "h-5 w-5 text-[#19234e]" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      {/* Silhueta de pessoas em grupo */}
+      <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
     </svg>
   );
 }

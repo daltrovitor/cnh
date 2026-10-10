@@ -1,22 +1,24 @@
 // Hello World
 "use client";
 
-import { CreditCard, Share2, ShieldCheck, X } from "lucide-react";
+import { ShieldCheck, X } from "lucide-react";
 import { useRef, useState } from "react";
 import type { Profile } from "@/lib/profile";
 import { ScreenHeader } from "./ScreenHeader";
-import { CnhCardFront, CnhVioQrSlide } from "./CnhCard";
+import { CnhCardFront, CnhCardBack, CnhVioQrSlide, CnhDetailsSlide } from "./CnhCard";
+import { IconCnhHistorico } from "./BrasaoRepublica";
 
 const SLIDES = [
   { id: "frente", label: "Frente da CNH" },
+  { id: "verso", label: "Verso da CNH" },
   { id: "qrcode", label: "QR Code Vio" },
+  { id: "detalhes", label: "Dados do Condutor" },
 ] as const;
 
 export function CardScreen({ profile, onBack }: { profile: Profile; onBack: () => void }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [historyOpen, setHistoryOpen] = useState(false);
-  const [copiedNotice, setCopiedNotice] = useState(false);
 
   function handleScroll() {
     const el = trackRef.current;
@@ -33,21 +35,9 @@ export function CardScreen({ profile, onBack }: { profile: Profile; onBack: () =
     setActive(index);
   }
 
-  function handleExport() {
-    if (navigator.share) {
-      navigator.share({
-        title: "CNH Digital",
-        text: `CNH Digital de ${profile.name} - Nº Registro: ${profile.registerNumber}`,
-      }).catch(() => {});
-    } else {
-      setCopiedNotice(true);
-      setTimeout(() => setCopiedNotice(false), 2500);
-    }
-  }
-
   return (
-    <div className="screen-in flex min-h-dvh flex-col bg-[#f5f6fa]">
-      {/* Cabeçalho Oficial Navy exato da referência visual (Image 4) */}
+    <div className="screen-in flex min-h-dvh flex-col bg-[#f5f6fa] select-none">
+      {/* Cabeçalho Oficial Navy exato da referência visual (Imagem 1) */}
       <ScreenHeader title="HABILITAÇÃO" onBack={onBack} />
 
       <main className="flex flex-1 flex-col pb-6">
@@ -66,23 +56,29 @@ export function CardScreen({ profile, onBack }: { profile: Profile; onBack: () =
           </p>
         </div>
 
-        {/* Carrossel da CNH com APENAS 2 páginas (Frente e QR Code) */}
+        {/* Carrossel da CNH com 4 Páginas Oficiais */}
         <div
           ref={trackRef}
           onScroll={handleScroll}
           className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto px-4"
           aria-roledescription="carrossel"
         >
-          <div className="w-full shrink-0 snap-center pb-2">
+          <div className="w-full shrink-0 snap-center pb-1">
             <CnhCardFront profile={profile} />
           </div>
-          <div className="w-full shrink-0 snap-center pb-2">
+          <div className="w-full shrink-0 snap-center pb-1">
+            <CnhCardBack profile={profile} />
+          </div>
+          <div className="w-full shrink-0 snap-center pb-1">
             <CnhVioQrSlide profile={profile} />
+          </div>
+          <div className="w-full shrink-0 snap-center pb-1">
+            <CnhDetailsSlide profile={profile} />
           </div>
         </div>
 
-        {/* Indicador de exatamente 2 pontos (Dots) exato da instrução */}
-        <div role="tablist" aria-label="Páginas da habilitação" className="flex justify-center items-center gap-2 py-3">
+        {/* Indicador de exatamente 4 pontos (Dots) exato da Imagem 1: ● ○ ○ ○ */}
+        <div role="tablist" aria-label="Páginas da habilitação" className="flex justify-center items-center gap-2 py-3.5">
           {SLIDES.map(({ id, label }, i) => (
             <button
               key={id}
@@ -91,12 +87,12 @@ export function CardScreen({ profile, onBack }: { profile: Profile; onBack: () =
               aria-selected={active === i}
               aria-label={label}
               onClick={() => goTo(i)}
-              className="flex h-8 w-8 items-center justify-center p-0"
+              className="flex h-6 w-6 items-center justify-center p-0 cursor-pointer"
             >
               <span
                 className={`transition-all ${
                   active === i
-                    ? "h-2.5 w-2.5 rounded-full bg-[#19234e] ring-2 ring-[#19234e]/30"
+                    ? "h-2 w-2 rounded-full bg-[#19234e]"
                     : "h-2 w-2 rounded-full border border-slate-400 bg-white"
                 }`}
               />
@@ -104,37 +100,19 @@ export function CardScreen({ profile, onBack }: { profile: Profile; onBack: () =
           ))}
         </div>
 
-        {/* Ações inferiores da referência visual (Image 4) */}
-        <div className="mt-auto flex flex-col gap-2.5 px-4 pt-2">
-          {/* 1. Histórico de emissões da CNH */}
+        {/* Botão Único Inferior Oficial da Imagem 1 */}
+        <div className="mt-auto flex flex-col px-4 pt-2">
           <button
             type="button"
             onClick={() => setHistoryOpen(true)}
-            className="flex h-14 w-full items-center gap-3.5 rounded-xl border border-slate-200/90 bg-white px-4 text-left shadow-sm transition-transform hover:bg-slate-50 active:scale-[0.99]"
+            className="flex h-14 w-full items-center gap-3.5 rounded-2xl border border-slate-200/80 bg-white px-4 text-left shadow-sm transition-transform hover:bg-slate-50 active:scale-[0.99] cursor-pointer"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#19234e]/10 text-[#19234e]">
-              <CreditCard aria-hidden className="h-5 w-5" />
+              <IconCnhHistorico className="h-5 w-5 text-[#19234e]" />
             </span>
             <span className="flex-1 text-sm font-bold text-[#19234e]">
               Histórico de emissões da CNH
             </span>
-          </button>
-
-          {/* 2. Compartilhar / Exportar */}
-          <button
-            type="button"
-            onClick={handleExport}
-            className="flex h-14 w-full items-center gap-3.5 rounded-xl border border-slate-200/90 bg-white px-4 text-left shadow-sm transition-transform hover:bg-slate-50 active:scale-[0.99]"
-          >
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#19234e]/10 text-[#19234e]">
-              <Share2 aria-hidden className="h-5 w-5" />
-            </span>
-            <span className="flex-1 text-sm font-bold text-[#19234e]">
-              Exportar CNH digital
-            </span>
-            {copiedNotice && (
-              <span className="text-xs font-semibold text-emerald-700">Link copiado!</span>
-            )}
           </button>
         </div>
       </main>
@@ -151,32 +129,37 @@ export function CardScreen({ profile, onBack }: { profile: Profile; onBack: () =
               <button
                 type="button"
                 onClick={() => setHistoryOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-slate-100 text-slate-500"
+                className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-slate-100 text-slate-500 cursor-pointer"
                 aria-label="Fechar"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             <div className="mt-4 flex flex-col gap-3 text-xs">
-              <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-emerald-900">Emissão Atual (Vigente)</span>
-                  <span className="rounded bg-emerald-600 px-1.5 py-0.5 text-[10px] font-bold text-white">ATIVA</span>
-                </div>
-                <p className="mt-1 text-slate-600">RENACH: {profile.registerNumber}</p>
-                <p className="text-slate-600">Data de Validade: {profile.validUntil}</p>
-                <p className="text-slate-600">Categoria: {profile.category}</p>
+              <div className="flex justify-between border-b border-slate-100 pb-2">
+                <span className="text-slate-500">1ª Emissão CNH:</span>
+                <span className="font-bold text-slate-800">{profile.firstLicenseDate}</span>
               </div>
-
-              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-slate-700">1ª Habilitação</span>
-                  <span className="text-[10px] font-bold text-slate-500">HISTÓRICO</span>
-                </div>
-                <p className="mt-1 text-slate-500">Data de Registro: {profile.firstLicenseDate}</p>
-                <p className="text-slate-500">Órgão Emissor: DETRAN / {profile.state}</p>
+              <div className="flex justify-between border-b border-slate-100 pb-2">
+                <span className="text-slate-500">Última Renovação:</span>
+                <span className="font-bold text-slate-800">12/03/2024</span>
+              </div>
+              <div className="flex justify-between border-b border-slate-100 pb-2">
+                <span className="text-slate-500">Validade Atual:</span>
+                <span className="font-bold text-emerald-700">{profile.validUntil}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Local de Emissão:</span>
+                <span className="font-bold text-slate-800">{profile.birthPlace || "SÃO PAULO - SP"}</span>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={() => setHistoryOpen(false)}
+              className="mt-5 h-11 w-full rounded-xl bg-[#19234e] text-xs font-bold text-white transition-transform active:scale-95 cursor-pointer"
+            >
+              Fechar
+            </button>
           </div>
         </div>
       )}
