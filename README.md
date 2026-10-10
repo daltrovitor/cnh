@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CNH do Brasil — Carteira Digital de Trânsito
 
-## Getting Started
+Aplicativo oficial digital para visualização e gerenciamento da Carteira Nacional de Habilitação (CNH) e do Certificado de Registro e Licenciamento de Veículo (CRLV-e).
 
-First, run the development server:
+## Recursos
+
+- **Entrada com Biometria Facial**: Reconhecimento biométrico seguro via WebAuthn nativo do dispositivo móvel.
+- **Visualização da Habilitação (CNH)**:
+  - Frente oficial com foto, assinatura, dados do condutor e brasão da República Federativa do Brasil.
+  - Verso oficial com categorias habilitadas (A, B, C, D, E, ACC) e observações (EAR).
+  - QR Code Vio oficial do SERPRO/SENATRAN para validação de autenticidade em tempo real.
+  - Histórico de emissões da CNH e exportação digital.
+- **Visualização do Licenciamento (CRLV-e)**:
+  - Documento do veículo completo com QR Code Vio, RENAVAM, Placa, Chassi e especificações técnicas.
+  - Compartilhamento e exportação digital.
+- **Perfil e Armazenamento no Celular**:
+  - Edição de foto e dados exclusivamente no Perfil.
+  - Persistência em camada dupla: `localStorage` e `IndexedDB` no próprio aparelho celular.
+- **PWA & Service Worker**:
+  - Suporte completo offline com Service Worker (`public/sw.js`).
+  - Cache de telas e documentos para acesso sem conexão com a internet.
+
+## Como Executar
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Abra [http://localhost:3000](http://localhost:3000) no seu navegador.

@@ -5,15 +5,15 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Campus Digital",
-    short_name: "Campus",
-    description: "Carteirinha estudantil digital — projeto acadêmico.",
+    name: "CNH do Brasil",
+    short_name: "CNH Brasil",
+    description: "Carteira Nacional de Habilitação e Licenciamento Digital Oficial.",
     start_url: "/",
     scope: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: "#ffffff",
-    theme_color: "#ffffff",
+    background_color: "#19234e",
+    theme_color: "#19234e",
     lang: "pt-BR",
     icons: [
       { src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },

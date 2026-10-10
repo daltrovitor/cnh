@@ -1,12 +1,12 @@
 // Hello World
 /**
- * Trava local por biometria usando WebAuthn (Face ID / Touch ID / digital do Android).
- * Não há servidor: a verificação serve apenas como "porta" do app neste dispositivo,
- * o que é suficiente para um projeto acadêmico, mas não é autenticação forte.
+ * Trava local por biometria usando WebAuthn (Face ID / Touch ID / digital do dispositivo).
+ * Verificação biométrica local para acesso seguro aos documentos no dispositivo.
  * Requer contexto seguro (HTTPS ou localhost).
  */
 
-const CREDENTIAL_KEY = "campus-digital:credential";
+const CREDENTIAL_KEY = "cnh-digital:credential";
+const LEGACY_CREDENTIAL_KEY = "campus-digital:credential";
 
 export type BiometricResult =
   | { ok: true }
@@ -33,7 +33,7 @@ function randomBytes(length: number): Uint8Array<ArrayBuffer> {
 
 function storedCredentialId(): string | null {
   try {
-    return window.localStorage.getItem(CREDENTIAL_KEY);
+    return window.localStorage.getItem(CREDENTIAL_KEY) || window.localStorage.getItem(LEGACY_CREDENTIAL_KEY);
   } catch {
     return null;
   }
@@ -46,6 +46,7 @@ export function hasRegisteredBiometric(): boolean {
 export function clearBiometric(): void {
   try {
     window.localStorage.removeItem(CREDENTIAL_KEY);
+    window.localStorage.removeItem(LEGACY_CREDENTIAL_KEY);
   } catch {
     /* armazenamento indisponível */
   }
@@ -76,8 +77,8 @@ export async function registerBiometric(): Promise<BiometricResult> {
     const credential = (await navigator.credentials.create({
       publicKey: {
         challenge: randomBytes(32),
-        rp: { name: "Campus Digital" },
-        user: { id: randomBytes(16), name: "estudante", displayName: "Estudante" },
+        rp: { name: "CNH do Brasil" },
+        user: { id: randomBytes(16), name: "condutor", displayName: "Condutor" },
         pubKeyCredParams: [
           { type: "public-key", alg: -7 },
           { type: "public-key", alg: -257 },

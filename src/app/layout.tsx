@@ -14,22 +14,26 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: "cover",
-  themeColor: "#ffffff",
+  themeColor: "#19234e",
 };
 
 export const metadata: Metadata = {
-  title: "Campus Digital",
-  description: "Carteirinha estudantil digital fictícia — projeto acadêmico.",
-  applicationName: "Campus Digital",
-  appleWebApp: { capable: true, title: "Campus", statusBarStyle: "default" },
-  icons: { apple: "/apple-touch-icon.png" },
+  title: "CNH do Brasil",
+  description: "Carteira Nacional de Habilitação (CNH) e Licenciamento (CRLV-e) Digital.",
+  applicationName: "CNH do Brasil",
+  appleWebApp: { capable: true, title: "CNH Brasil", statusBarStyle: "black-translucent" },
+  icons: { apple: "/apple-touch-icon.png", icon: "/favicon.ico" },
   formatDetection: { telephone: false },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="pt-BR" className={`${montserrat.variable} antialiased`} suppressHydrationWarning>
-      <body className="min-h-dvh bg-background font-sans" suppressHydrationWarning>
+      <body className="min-h-dvh bg-[#f8fafc] font-sans antialiased" suppressHydrationWarning>
         {children}
       </body>
     </html>
