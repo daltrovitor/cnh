@@ -45,35 +45,35 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
       ? "Verificando biometria…"
       : state.status === "ready" && !state.registered
         ? "Cadastrar biometria facial"
-        : "Usar biometria facial";
+        : "USAR BIOMETRIA FACIAL";
 
   return (
-    <main className="screen-in relative flex min-h-dvh flex-col justify-between bg-white overflow-x-hidden">
-      {/* 1. Imagem Superior do Condutor (descartando notch/status bar do iPhone via overflow e deslocamento negativo) */}
-      <div className="relative h-[48vh] min-h-[300px] w-full overflow-hidden bg-slate-900 select-none">
-        {/* eslint-disable-next-line @next/next/no-img-element -- imagem hero do condutor */}
+    <main className="screen-in relative flex min-h-dvh w-full flex-col justify-end overflow-hidden bg-slate-900 select-none">
+      {/* 1. Imagem no fundo inteiro da tela */}
+      <div className="absolute inset-0 z-0 h-full w-full pointer-events-none">
+        {/* eslint-disable-next-line @next/next/no-img-element -- foto limpa da condutora em tela inteira */}
         <img
-          src="/hero-driver.png"
+          src="/driver-bg-clean.png"
           alt="Condutora no trânsito"
-          className="h-[125%] w-full object-cover object-top -translate-y-[6%]"
+          className="h-full w-full object-cover object-[center_20%]"
         />
-        {/* Gradiente sutil para transição elegante */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/25 pointer-events-none" />
+        {/* Sombra sutil de profundidade */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/35" />
       </div>
 
-      {/* 2. Card Inferior Branco com Bordas Arredondadas (exato da referência) */}
-      <div className="relative z-10 -mt-8 flex flex-1 flex-col items-center justify-between rounded-t-[32px] bg-white px-6 pt-7 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-[0_-12px_32px_rgba(0,0,0,0.12)]">
+      {/* 2. Card inferior mais alto e arredondado sobre a imagem de fundo */}
+      <div className="relative z-10 flex w-full flex-col items-center justify-between rounded-t-[32px] bg-white px-6 pt-7 pb-[calc(2.2rem+env(safe-area-inset-bottom))] shadow-[0_-16px_40px_rgba(0,0,0,0.28)]">
         <div className="flex w-full flex-col items-center text-center">
           {/* Logo Oficial: Bandeira do Brasil + CNH do BRASIL */}
-          {/* eslint-disable-next-line @next/next/no-img-element -- logo oficial enviado pelo usuário */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- ícone oficial fornecido pelo usuário */}
           <img
-            src="/logo-brasil.png"
+            src="/app-icon-brasil.png"
             alt="CNH do Brasil"
-            className="h-28 w-auto object-contain drop-shadow-sm transition-transform hover:scale-105"
+            className="h-32 w-auto object-contain drop-shadow-sm transition-transform hover:scale-105"
           />
 
           {/* Termos de Uso e Política de Privacidade */}
-          <p className="mt-4 max-w-[280px] text-xs font-medium text-slate-700 leading-relaxed">
+          <p className="mt-3.5 max-w-[290px] text-xs font-medium text-slate-700 leading-relaxed">
             Ao entrar, você concorda com nosso{" "}
             <button
               type="button"
@@ -93,26 +93,26 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
           </p>
         </div>
 
-        {/* 3. Ações de Entrada: Usar Biometria Facial */}
-        <div className="mt-6 flex w-full max-w-sm flex-col items-center gap-3">
+        {/* 3. Botão de Biometria Facial */}
+        <div className="mt-6 flex w-full max-w-sm flex-col items-center gap-2.5">
           {state.status === "unsupported" ? (
             <button
               type="button"
               onClick={onUnlock}
-              className="flex h-13 w-full items-center justify-center gap-2.5 rounded-full bg-[#154fc9] px-6 text-sm font-bold tracking-wide text-white shadow-lg shadow-blue-900/25 transition-transform active:scale-[0.98] hover:bg-[#1242ab]"
+              className="flex h-13 w-full items-center justify-center gap-2.5 rounded-full bg-[#154fc9] px-6 text-sm font-bold tracking-wider text-white shadow-lg shadow-blue-900/30 transition-transform active:scale-[0.98] hover:bg-[#1242ab]"
             >
               <ScanFace className="h-5 w-5" />
-              Entrar no aplicativo
+              USAR BIOMETRIA FACIAL
             </button>
           ) : (
             <button
               type="button"
               onClick={handleUnlock}
               disabled={state.status !== "ready"}
-              className="flex h-13 w-full items-center justify-center gap-2.5 rounded-full bg-[#154fc9] px-6 text-sm font-bold tracking-wide text-white shadow-lg shadow-blue-900/25 transition-transform active:scale-[0.98] disabled:opacity-60 hover:bg-[#1242ab]"
+              className="flex h-13 w-full items-center justify-center gap-2.5 rounded-full bg-[#154fc9] px-6 text-sm font-bold tracking-wider text-white shadow-lg shadow-blue-900/30 transition-transform active:scale-[0.98] disabled:opacity-60 hover:bg-[#1242ab]"
             >
               <ScanFace className="h-5 w-5 stroke-[2.2]" />
-              {state.status === "checking" ? "Iniciando…" : label}
+              {state.status === "checking" ? "INICIANDO…" : label}
             </button>
           )}
 

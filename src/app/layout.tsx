@@ -22,7 +22,10 @@ export const metadata: Metadata = {
   description: "Carteira Nacional de Habilitação (CNH) e Licenciamento (CRLV-e) Digital.",
   applicationName: "CNH do Brasil",
   appleWebApp: { capable: true, title: "CNH Brasil", statusBarStyle: "black-translucent" },
-  icons: { apple: "/apple-touch-icon.png", icon: "/favicon.ico" },
+  icons: {
+    icon: "/app-icon-brasil.png",
+    apple: "/app-icon-brasil.png",
+  },
   formatDetection: { telephone: false },
 };
 

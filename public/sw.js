@@ -5,13 +5,11 @@
 const CACHE_NAME = "cnh-brasil-pwa-v2";
 const ASSETS_TO_CACHE = [
   "/",
+  "/app-icon-brasil.png",
+  "/driver-bg-clean.png",
   "/logo-brasil.png",
-  "/hero-driver.png",
-  "/cnh-logo.png",
-  "/icon.svg",
-  "/icon-192.png",
-  "/icon-512.png",
-  "/apple-touch-icon.png",
+  "/cnh-doc-official.png",
+  "/crlv-doc-official.png",
   "/favicon.ico",
 ];
 

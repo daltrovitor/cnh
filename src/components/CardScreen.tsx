@@ -5,18 +5,11 @@ import { CreditCard, Share2, ShieldCheck, X } from "lucide-react";
 import { useRef, useState } from "react";
 import type { Profile } from "@/lib/profile";
 import { ScreenHeader } from "./ScreenHeader";
-import {
-  CnhCardBack,
-  CnhCardFront,
-  CnhDetailsSlide,
-  CnhVioQrSlide,
-} from "./CnhCard";
+import { CnhCardFront, CnhVioQrSlide } from "./CnhCard";
 
 const SLIDES = [
   { id: "frente", label: "Frente da CNH" },
-  { id: "verso", label: "Verso da CNH" },
   { id: "qrcode", label: "QR Code Vio" },
-  { id: "dados", label: "Certificado" },
 ] as const;
 
 export function CardScreen({ profile, onBack }: { profile: Profile; onBack: () => void }) {
@@ -54,7 +47,7 @@ export function CardScreen({ profile, onBack }: { profile: Profile; onBack: () =
 
   return (
     <div className="screen-in flex min-h-dvh flex-col bg-[#f5f6fa]">
-      {/* Cabeçalho Oficial Navy */}
+      {/* Cabeçalho Oficial Navy exato da referência visual (Image 4) */}
       <ScreenHeader title="HABILITAÇÃO" onBack={onBack} />
 
       <main className="flex flex-1 flex-col pb-6">
@@ -73,7 +66,7 @@ export function CardScreen({ profile, onBack }: { profile: Profile; onBack: () =
           </p>
         </div>
 
-        {/* Carrossel de Lados da CNH */}
+        {/* Carrossel da CNH com APENAS 2 páginas (Frente e QR Code) */}
         <div
           ref={trackRef}
           onScroll={handleScroll}
@@ -84,18 +77,12 @@ export function CardScreen({ profile, onBack }: { profile: Profile; onBack: () =
             <CnhCardFront profile={profile} />
           </div>
           <div className="w-full shrink-0 snap-center pb-2">
-            <CnhCardBack profile={profile} />
-          </div>
-          <div className="w-full shrink-0 snap-center pb-2">
             <CnhVioQrSlide profile={profile} />
-          </div>
-          <div className="w-full shrink-0 snap-center pb-2">
-            <CnhDetailsSlide profile={profile} />
           </div>
         </div>
 
-        {/* Indicador de 4 pontos (Dots) exato da referência visual */}
-        <div role="tablist" aria-label="Lados do documento" className="flex justify-center items-center gap-2 py-3">
+        {/* Indicador de exatamente 2 pontos (Dots) exato da instrução */}
+        <div role="tablist" aria-label="Páginas da habilitação" className="flex justify-center items-center gap-2 py-3">
           {SLIDES.map(({ id, label }, i) => (
             <button
               key={id}
@@ -117,7 +104,7 @@ export function CardScreen({ profile, onBack }: { profile: Profile; onBack: () =
           ))}
         </div>
 
-        {/* Ações inferiores da referência visual (Image 3) */}
+        {/* Ações inferiores da referência visual (Image 4) */}
         <div className="mt-auto flex flex-col gap-2.5 px-4 pt-2">
           {/* 1. Histórico de emissões da CNH */}
           <button
