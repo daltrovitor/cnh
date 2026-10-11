@@ -107,51 +107,49 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
       </div>
 
       {/* 3. Corpo Principal do Documento */}
-      <div className="flex flex-1 p-2 gap-2 overflow-hidden items-stretch">
-        {/* Coluna Esquerda: Mapa + Tarja Vertical ("VÁLIDA EM TODO O TERRITÓRIO NACIONAL" + Nº) + Foto + Assinatura */}
-        <div className="flex w-[115px] shrink-0 flex-col justify-between">
-          {/* Topo da coluna esquerda: Mapa do Brasil em Dourado */}
-          <div className="flex items-center pl-1 pt-0.5">
-            <MapaEstado className="h-7 w-7 text-[#c89632] drop-shadow-xs" />
+      <div className="flex flex-1 p-2 gap-1.5 overflow-hidden items-stretch">
+        {/* Faixa Extrema Esquerda: Mapa do Brasil Dourado no topo + Tarja Vertical ("VÁLIDA EM TODO O TERRITÓRIO NACIONAL" + Nº) */}
+        <div className="flex w-7 shrink-0 flex-col items-center justify-between py-0.5">
+          {/* Topo: Mapa do Brasil Dourado */}
+          <MapaEstado className="h-6 w-6 text-[#c89632] drop-shadow-xs shrink-0" />
+
+          {/* Tarja de Texto e Número em 90 Graus */}
+          <div className="my-auto flex items-center justify-center [writing-mode:vertical-rl] rotate-180 gap-1.5">
+            <span className="text-[6.5px] font-black tracking-widest text-slate-900 uppercase">
+              VÁLIDA EM TODO O TERRITÓRIO NACIONAL
+            </span>
+            <span className="font-mono text-[8.5px] font-black text-slate-950 tracking-wider">
+              {profile.formNumber || "\u00A0"}
+            </span>
+          </div>
+        </div>
+
+        {/* Coluna da Foto Oficial 3x4 e Assinatura do Portador */}
+        <div className="flex w-[108px] shrink-0 flex-col justify-between">
+          {/* Foto Oficial do Condutor: Proporção Exata 3x4 começando no topo (do lado do Nome) */}
+          <div className="relative aspect-[3/4] w-full shrink-0 overflow-hidden rounded-[3px] border border-[#2b533d] bg-white shadow-xs">
+            {profile.photo ? (
+              // eslint-disable-next-line @next/next/no-img-element -- foto proporcional com cabeça apontada para a direita após rotação
+              <img
+                src={profile.photo}
+                alt={`Foto de ${profile.name}`}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-white/70" />
+            )}
           </div>
 
-          {/* Área Central: Texto Vertical + Foto do Condutor */}
-          <div className="flex items-stretch gap-1.5 my-auto">
-            {/* Tarja de Texto e Número em 90 Graus */}
-            <div className="flex items-center justify-center [writing-mode:vertical-rl] rotate-180 shrink-0 gap-1.5 pr-0.5">
-              <span className="text-[6.5px] font-black tracking-widest text-slate-900 uppercase">
-                VÁLIDA EM TODO O TERRITÓRIO NACIONAL
-              </span>
-              <span className="font-mono text-[9px] font-black text-slate-950 tracking-wider">
-                {profile.formNumber || "\u00A0"}
-              </span>
-            </div>
-
-            {/* Foto Oficial do Condutor: Proporção 3x4 com a cabeça apontada para a DIREITA na tela */}
-            <div className="relative aspect-[3/4] w-[74px] shrink-0 overflow-hidden rounded-[3px] border border-[#2b533d] bg-white shadow-xs">
-              {profile.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element -- foto do condutor com cabeça voltada para a direita após rotação
-                <img
-                  src={profile.photo}
-                  alt={`Foto de ${profile.name}`}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-white/70" />
-              )}
-            </div>
-          </div>
-
-          {/* Base da coluna esquerda: Box da Assinatura do Portador */}
-          <div className="relative flex h-8.5 w-full flex-col justify-between rounded-[3px] border border-[#2b533d] bg-white/95 px-1 py-0.5 shadow-xs">
+          {/* Box da Assinatura do Portador: Embaixo da foto, posicionado na base ao lado da Filiação */}
+          <div className="relative flex h-11 w-full shrink-0 flex-col justify-between rounded-[3px] border border-[#2b533d] bg-white/95 px-1 py-0.5 shadow-xs">
             {/* Assinatura Renderizada */}
-            <div className="flex h-4.5 w-full items-center justify-center overflow-hidden">
+            <div className="flex h-6 w-full items-center justify-center overflow-hidden">
               {profile.signature ? (
                 // eslint-disable-next-line @next/next/no-img-element -- assinatura gráfica do portador
                 <img
                   src={profile.signature}
                   alt="Assinatura do Portador"
-                  className="max-h-4.5 w-auto max-w-full object-contain"
+                  className="max-h-6 w-auto max-w-full object-contain"
                 />
               ) : (
                 <span className="text-[9px] text-transparent select-none">{"\u00A0"}</span>
