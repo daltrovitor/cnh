@@ -268,3 +268,50 @@ export async function resizeImage(file: File, maxSize = 480): Promise<string> {
   bitmap.close();
   return canvas.toDataURL("image/jpeg", 0.82);
 }
+
+/** Gira uma imagem em base64 em 90 graus no sentido horário */
+export async function rotateDataUrl(dataUrl: string, degrees = 90): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      if (degrees % 180 === 0) {
+        canvas.width = img.width;
+        canvas.height = img.height;
+      } else {
+        canvas.width = img.height;
+        canvas.height = img.width;
+      }
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return reject(new Error("Canvas indisponível"));
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate((degrees * Math.PI) / 180);
+      ctx.drawImage(img, -img.width / 2, -img.height / 2);
+      resolve(canvas.toDataURL("image/jpeg", 0.85));
+    };
+    img.onerror = () => reject(new Error("Erro ao carregar imagem"));
+    img.src = dataUrl;
+  });
+}
+
+/** Inverte/espelha uma imagem em base64 horizontalmente */
+export async function flipHorizontalDataUrl(dataUrl: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return reject(new Error("Canvas indisponível"));
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL("image/jpeg", 0.85));
+    };
+    img.onerror = () => reject(new Error("Erro ao carregar imagem"));
+    img.src = dataUrl;
+  });
+}
+
+

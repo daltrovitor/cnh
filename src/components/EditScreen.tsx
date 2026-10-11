@@ -1,9 +1,9 @@
 // Hello World
 "use client";
 
-import { Camera, Check, Dices, PenTool, RotateCcw, Trash2, UserRound } from "lucide-react";
+import { Camera, Check, Dices, FlipHorizontal, PenTool, RotateCcw, RotateCw, Trash2, UserRound } from "lucide-react";
 import { useId, useState, type ChangeEvent, type FormEvent } from "react";
-import { defaultProfile, emptyProfile, generateRandomProfile, profileSchema, resizeImage, type Profile } from "@/lib/profile";
+import { defaultProfile, emptyProfile, generateRandomProfile, profileSchema, resizeImage, rotateDataUrl, flipHorizontalDataUrl, type Profile } from "@/lib/profile";
 import { ScreenHeader } from "./ScreenHeader";
 import { SignatureModal } from "./SignatureModal";
 
@@ -138,13 +138,47 @@ export function EditScreen({ profile, onBack, onSave }: Props) {
               <input id={photoId} type="file" accept="image/*" onChange={handlePhoto} className="sr-only" />
 
               {draft.photo && (
-                <button
-                  type="button"
-                  onClick={() => setDraft((d) => ({ ...d, photo: "" }))}
-                  className="h-8 rounded-lg text-left text-xs font-semibold text-red-600 hover:underline cursor-pointer"
-                >
-                  Remover foto
-                </button>
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        const rotated = await rotateDataUrl(draft.photo, 90);
+                        setDraft((d) => ({ ...d, photo: rotated }));
+                      } catch {
+                        /* ignore */
+                      }
+                    }}
+                    className="flex h-8 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer shadow-xs transition-colors"
+                  >
+                    <RotateCw className="h-3.5 w-3.5 text-slate-600" />
+                    Girar 90°
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        const flipped = await flipHorizontalDataUrl(draft.photo);
+                        setDraft((d) => ({ ...d, photo: flipped }));
+                      } catch {
+                        /* ignore */
+                      }
+                    }}
+                    className="flex h-8 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer shadow-xs transition-colors"
+                  >
+                    <FlipHorizontal className="h-3.5 w-3.5 text-slate-600" />
+                    Espelhar
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setDraft((d) => ({ ...d, photo: "" }))}
+                    className="h-8 rounded-lg px-1 text-xs font-semibold text-red-600 hover:underline cursor-pointer"
+                  >
+                    Remover foto
+                  </button>
+                </div>
               )}
             </div>
           </div>
