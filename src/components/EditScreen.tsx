@@ -1,12 +1,13 @@
 // Hello World
 "use client";
 
-import { Camera, Check, RotateCcw, UserRound } from "lucide-react";
+import { Camera, Check, PenTool, RotateCcw, Sparkles, UserRound } from "lucide-react";
 import { useId, useState, type ChangeEvent, type FormEvent } from "react";
-import { defaultProfile, profileSchema, resizeImage, type Profile } from "@/lib/profile";
+import { defaultProfile, referenceProfile, profileSchema, resizeImage, type Profile } from "@/lib/profile";
 import { ScreenHeader } from "./ScreenHeader";
+import { SignatureModal } from "./SignatureModal";
 
-type TextField = Exclude<keyof Profile, "photo">;
+type TextField = Exclude<keyof Profile, "photo" | "signature">;
 
 type Props = {
   profile: Profile;
@@ -58,6 +59,7 @@ export function EditScreen({ profile, onBack, onSave }: Props) {
   const [errors, setErrors] = useState<Partial<Record<keyof Profile, string>>>({});
   const [status, setStatus] = useState<string | null>(null);
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [signatureModalOpen, setSignatureModalOpen] = useState(false);
   const photoId = useId();
 
   function update(key: TextField, value: string) {
@@ -110,7 +112,7 @@ export function EditScreen({ profile, onBack, onSave }: Props) {
       <ScreenHeader title="MEU PERFIL" onBack={onBack} />
 
       <main className="flex-1 px-4 pt-4 pb-[calc(2rem+env(safe-area-inset-bottom))]">
-        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
           {/* Foto do Condutor */}
           <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-3.5">
             <div className="relative aspect-[3/4] w-24 shrink-0 overflow-hidden rounded-xl border-2 border-[#19234e]/20 bg-white shadow-sm">
@@ -128,7 +130,7 @@ export function EditScreen({ profile, onBack, onSave }: Props) {
               <span className="text-xs font-bold uppercase text-[#19234e]">Foto do Condutor</span>
               <label
                 htmlFor={photoId}
-                className="flex h-11 items-center justify-center gap-2 rounded-xl border border-[#19234e] bg-white px-3 text-xs font-bold text-[#19234e] shadow-sm hover:bg-slate-50 transition-colors"
+                className="flex h-11 items-center justify-center gap-2 rounded-xl border border-[#19234e] bg-white px-3 text-xs font-bold text-[#19234e] shadow-sm hover:bg-slate-50 cursor-pointer transition-colors"
               >
                 <Camera aria-hidden className="h-4 w-4" />
                 Alterar foto
@@ -139,9 +141,45 @@ export function EditScreen({ profile, onBack, onSave }: Props) {
                 <button
                   type="button"
                   onClick={() => setDraft((d) => ({ ...d, photo: "" }))}
-                  className="h-8 rounded-lg text-left text-xs font-semibold text-red-600 hover:underline"
+                  className="h-8 rounded-lg text-left text-xs font-semibold text-red-600 hover:underline cursor-pointer"
                 >
                   Remover foto
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Assinatura do Portador (7 ASSINATURA DO PORTADOR) */}
+          <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-3.5">
+            <div className="relative flex aspect-[2.2/1] w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-[#19234e]/20 bg-white p-1 shadow-sm">
+              {draft.signature ? (
+                // eslint-disable-next-line @next/next/no-img-element -- assinatura gráfica
+                <img src={draft.signature} alt="Assinatura" className="h-full w-auto object-contain" />
+              ) : (
+                <span className="font-serif italic text-[11px] font-bold text-slate-800 truncate select-none">
+                  {draft.name}
+                </span>
+              )}
+            </div>
+
+            <div className="flex flex-1 flex-col gap-2">
+              <span className="text-xs font-bold uppercase text-[#19234e]">Assinatura do Portador</span>
+              <button
+                type="button"
+                onClick={() => setSignatureModalOpen(true)}
+                className="flex h-11 items-center justify-center gap-2 rounded-xl border border-[#19234e] bg-white px-3 text-xs font-bold text-[#19234e] shadow-sm hover:bg-slate-50 cursor-pointer transition-colors"
+              >
+                <PenTool aria-hidden className="h-4 w-4" />
+                {draft.signature ? "Alterar assinatura" : "Desenhar assinatura"}
+              </button>
+
+              {draft.signature && (
+                <button
+                  type="button"
+                  onClick={() => setDraft((d) => ({ ...d, signature: "" }))}
+                  className="h-8 rounded-lg text-left text-xs font-semibold text-red-600 hover:underline cursor-pointer"
+                >
+                  Remover assinatura
                 </button>
               )}
             </div>
@@ -300,6 +338,44 @@ export function EditScreen({ profile, onBack, onSave }: Props) {
                   inputClassName="uppercase"
                 />
               </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <FormInput
+                  id="f-issueDate"
+                  label="4a Data de Emissão"
+                  value={draft.issueDate || "06/01/2023"}
+                  error={errors.issueDate}
+                  placeholder="DD/MM/AAAA"
+                  onChange={(v) => update("issueDate", v)}
+                />
+                <FormInput
+                  id="f-formNumber"
+                  label="Nº Espelho / Formulário"
+                  value={draft.formNumber || "2519950272"}
+                  error={errors.formNumber}
+                  placeholder="2519950272"
+                  onChange={(v) => update("formNumber", v)}
+                  inputClassName="font-mono"
+                />
+              </div>
+
+              {/* Botão de Preenchimento da CNH de Referência da Foto */}
+              <button
+                type="button"
+                onClick={() => {
+                  setDraft((prev) => ({
+                    ...prev,
+                    ...referenceProfile,
+                    photo: prev.photo || referenceProfile.photo,
+                    signature: prev.signature || referenceProfile.signature,
+                  }));
+                  setStatus("Dados da CNH de Referência (Odair Fabian) carregados! Clique em Salvar.");
+                }}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-emerald-600 bg-emerald-50 px-3 text-xs font-bold text-emerald-800 hover:bg-emerald-100 cursor-pointer transition-colors"
+              >
+                <Sparkles className="h-4 w-4 text-emerald-600" />
+                Preencher dados da CNH de Referência (Odair Fabian)
+              </button>
             </div>
           )}
 
@@ -437,6 +513,18 @@ export function EditScreen({ profile, onBack, onSave }: Props) {
           </div>
         </form>
       </main>
+
+      {/* Modal Interativo de Desenho / Upload / Geração de Assinatura */}
+      <SignatureModal
+        isOpen={signatureModalOpen}
+        onClose={() => setSignatureModalOpen(false)}
+        onSave={(sig) => {
+          setDraft((d) => ({ ...d, signature: sig }));
+          setStatus("Nova assinatura configurada! Clique em Salvar Alterações.");
+        }}
+        currentSignature={draft.signature}
+        driverName={draft.name}
+      />
     </div>
   );
 }

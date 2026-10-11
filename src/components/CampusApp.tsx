@@ -61,6 +61,7 @@ export function CampusApp() {
         <CardScreen
           profile={profile}
           onBack={() => setView("home")}
+          onSave={handleSave}
         />
       )}
       {view === "crlv" && (

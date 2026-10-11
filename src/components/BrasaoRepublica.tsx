@@ -37,28 +37,35 @@ export function BrasaoRepublica({ className = "h-7 w-7 text-amber-400" }: { clas
   );
 }
 
-/** Selo Oficial Oval "BR" idêntico ao modelo da Imagem 1 */
-export function SeloBr({ className = "h-7 w-9" }: { className?: string }) {
+/** Selo Oficial Oval "BR" com textura de segurança guilhochê idêntico ao modelo da CNH */
+export function SeloBr({ className = "h-8 w-11" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 84 56" className={className} aria-label="Selo BR Oficial">
+    <svg viewBox="0 0 96 64" className={className} aria-label="Selo BR Oficial">
       <defs>
         <linearGradient id="goldSeloGrad" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#fef08a" />
-          <stop offset="45%" stopColor="#eab308" />
-          <stop offset="100%" stopColor="#b48328" />
+          <stop offset="35%" stopColor="#eab308" />
+          <stop offset="70%" stopColor="#ca8a04" />
+          <stop offset="100%" stopColor="#854d0e" />
         </linearGradient>
+        <pattern id="guillochePattern" width="12" height="12" patternUnits="userSpaceOnUse">
+          <path d="M 0 6 Q 3 0, 6 6 T 12 6" fill="none" stroke="#fef08a" strokeWidth="0.6" opacity="0.45" />
+          <path d="M 6 0 Q 0 3, 6 6 T 6 12" fill="none" stroke="#ca8a04" strokeWidth="0.5" opacity="0.35" />
+        </pattern>
       </defs>
       {/* Oval externo dourado com relevo */}
-      <ellipse cx="42" cy="28" rx="40" ry="26" fill="url(#goldSeloGrad)" stroke="#854d0e" strokeWidth="1.8" />
-      {/* Linha interna tracejada de segurança */}
-      <ellipse cx="42" cy="28" rx="35" ry="21" fill="none" stroke="#fef9c3" strokeWidth="1.2" strokeDasharray="3 2" />
+      <ellipse cx="48" cy="32" rx="46" ry="30" fill="url(#goldSeloGrad)" stroke="#713f12" strokeWidth="1.5" />
+      {/* Camada guilhochê */}
+      <ellipse cx="48" cy="32" rx="42" ry="26" fill="url(#guillochePattern)" stroke="#fef9c3" strokeWidth="0.8" />
+      {/* Círculo concêntrico tracejado */}
+      <ellipse cx="48" cy="32" rx="38" ry="22" fill="none" stroke="#ffffff" strokeWidth="1" strokeDasharray="2.5 1.5" opacity="0.85" />
       {/* Letras BR proeminentes em negrito */}
       <text
-        x="42"
-        y="36"
+        x="48"
+        y="41"
         textAnchor="middle"
         fill="#1e293b"
-        fontSize="24"
+        fontSize="28"
         fontWeight="900"
         fontFamily="ui-sans-serif, system-ui, sans-serif"
         letterSpacing="2"
@@ -69,11 +76,11 @@ export function SeloBr({ className = "h-7 w-9" }: { className?: string }) {
   );
 }
 
-/** Silhueta Oficial do Mapa em Dourado Sólido (sem textos, exatamente como na Imagem 1) */
-export function MapaEstado({ className = "h-7 w-7 text-[#c89632]" }: { estado?: string; className?: string }) {
+/** Silhueta Oficial do Mapa do Brasil em Dourado/Âmbar idêntica à referência */
+export function MapaEstado({ className = "h-8 w-8 text-[#c89632]" }: { estado?: string; className?: string }) {
   return (
-    <svg viewBox="0 0 100 100" fill="currentColor" className={className} aria-label="Silhueta do Mapa">
-      <path d="M38 10 C 52 8, 70 14, 76 24 C 84 35, 78 48, 82 62 C 86 74, 75 88, 62 92 C 48 96, 32 88, 22 76 C 14 64, 16 46, 20 34 C 24 22, 28 12, 38 10 Z" />
+    <svg viewBox="0 0 100 100" fill="currentColor" className={className} aria-label="Silhueta do Mapa do Brasil">
+      <path d="M48 6 C42 6, 36 8, 30 11 C26 13, 20 18, 14 20 C10 22, 6 26, 4 30 C3 34, 6 38, 10 40 C14 42, 17 40, 21 44 C24 47, 22 52, 24 56 C26 60, 31 62, 35 64 C38 67, 40 72, 43 76 C46 80, 48 86, 52 90 C54 93, 56 94, 57 91 C58 87, 56 82, 59 78 C62 74, 67 72, 70 68 C74 64, 76 58, 80 54 C85 50, 92 46, 94 40 C96 34, 91 30, 87 27 C83 24, 80 20, 75 18 C70 16, 64 12, 58 8 C55 6, 51 6, 48 6 Z" />
     </svg>
   );
 }

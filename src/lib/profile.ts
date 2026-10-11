@@ -3,7 +3,8 @@ import { z } from "zod";
 
 /** Dados do condutor e veículo exibidos na Carteira Digital (CNH e CRLV-e). */
 export const profileSchema = z.object({
-  photo: z.string().startsWith("data:image/").or(z.literal("")),
+  photo: z.string().default(""),
+  signature: z.string().default(""),
   name: z.string().trim().min(1, "Informe o nome").max(70),
   cpf: z.string().trim().min(1, "Informe o CPF").max(20),
   rg: z.string().trim().min(1, "Informe o RG").max(30),
@@ -18,6 +19,8 @@ export const profileSchema = z.object({
   affiliation: z.string().trim().max(100),
   observations: z.string().trim().max(60),
   state: z.string().trim().max(10),
+  issueDate: z.string().trim().max(15).default("06/01/2023"),
+  formNumber: z.string().trim().max(25).default("2519950272"),
 
   // Dados do veículo (CRLV-e)
   renavam: z.string().trim().max(20),
@@ -38,22 +41,25 @@ export const profileSchema = z.object({
 
 export type Profile = z.infer<typeof profileSchema>;
 
-export const defaultProfile: Profile = {
+export const referenceProfile: Profile = {
   photo: "",
-  name: "MARIANA DE OLIVEIRA SANTOS",
-  cpf: "348.912.765-04",
-  rg: "45.892.103-7 SSP/SP",
-  birthDate: "14/03/1995",
-  birthPlace: "SÃO PAULO - SP",
-  validUntil: "12/10/2032",
-  firstLicenseDate: "14/05/2013",
-  registerNumber: "06284917305",
+  signature: "",
+  name: "ODAIR ANTONIO FABIAN",
+  cpf: "273.125.186-72",
+  rg: "1437078 SSP MG",
+  birthDate: "26/01/1958",
+  birthPlace: "UBERLANDIA, MG",
+  validUntil: "06/01/2028",
+  firstLicenseDate: "08/07/1976",
+  registerNumber: "01085778251",
   category: "AB",
-  securityCode: "98124765301",
-  nationality: "BRASILEIRA",
-  affiliation: "MARIA DE OLIVEIRA SANTOS / JOSÉ CARLOS SANTOS",
-  observations: "EAR - EXERCE ATIVIDADE REMUNERADA",
-  state: "SP",
+  securityCode: "01085778251",
+  nationality: "BRASILEIRO",
+  affiliation: "GERALDO ANTONIO / ALMINDA DO NASCIMENTO",
+  observations: "EAR — EXERCE ATIVIDADE REMUNERADA",
+  state: "MG",
+  issueDate: "06/01/2023",
+  formNumber: "2519950272",
 
   renavam: "00981246735",
   plate: "BRA2E19",
@@ -70,6 +76,8 @@ export const defaultProfile: Profile = {
   color: "BRANCA",
   fuel: "ÁLCOOL / GASOLINA",
 };
+
+export const defaultProfile: Profile = referenceProfile;
 
 const STORAGE_KEY = "cnh-digital:profile";
 const LEGACY_STORAGE_KEY = "campus-digital:profile";
