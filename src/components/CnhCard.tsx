@@ -1,7 +1,6 @@
 // Hello World
 "use client";
 
-import { Edit3, UserRound } from "lucide-react";
 import type { Profile } from "@/lib/profile";
 import { BrasaoRepublica, MapaEstado, SeloBr, QrCodeVioSvg } from "./BrasaoRepublica";
 
@@ -19,15 +18,15 @@ function CnhBox({
 }) {
   return (
     <div
-      className={`flex flex-col justify-between rounded-[4px] border border-[#2b533d] bg-white/85 px-1.5 py-0.5 shadow-xs ${className}`}
+      className={`flex flex-col justify-between rounded-[3px] border border-[#2b533d] bg-white/85 px-1.5 py-0.5 shadow-xs ${className}`}
     >
       <span className="text-[7px] font-bold uppercase tracking-tight text-[#1e4632] leading-none">
         {label}
       </span>
       <span
-        className={`truncate text-[10.5px] font-black uppercase text-slate-950 leading-tight ${valueClassName}`}
+        className={`truncate text-[10px] font-black uppercase text-slate-950 leading-tight min-h-[14px] ${valueClassName}`}
       >
-        {value || "—"}
+        {value || "\u00A0"}
       </span>
     </div>
   );
@@ -36,7 +35,7 @@ function CnhBox({
 /** Padrão de hachuras de segurança para o campo ACC da CNH */
 function AccSecurityHatch() {
   return (
-    <div className="flex flex-col justify-between rounded-[4px] border border-[#2b533d] bg-white/85 px-1 py-0.5 shadow-xs">
+    <div className="flex flex-col justify-between rounded-[3px] border border-[#2b533d] bg-white/85 px-1 py-0.5 shadow-xs">
       <span className="text-[6.5px] font-bold uppercase tracking-tight text-[#1e4632] leading-none text-center">
         ACC
       </span>
@@ -51,28 +50,20 @@ function AccSecurityHatch() {
   );
 }
 
-/** Frente da CNH Oficial Brasileira idêntica à referência visual (Resolução Contran 886) */
-export function CnhCardFront({
-  profile,
-  isSideways = true,
-  onSign,
-}: {
-  profile: Profile;
-  isSideways?: boolean;
-  onSign?: () => void;
-}) {
+/** Frente da CNH Oficial Brasileira idêntica à referência visual do app CDT */
+export function CnhCardFront({ profile }: { profile: Profile }) {
   // Separação dos nomes da filiação para renderizar em 2 linhas autênticas
   const affiliationParts = profile.affiliation
     ? profile.affiliation.split(/\s*[/|\n]\s*/)
-    : ["GERALDO ANTONIO", "ALMINDA DO NASCIMENTO"];
-  const line1Father = affiliationParts[0] || "—";
+    : [];
+  const line1Father = affiliationParts[0] || "";
   const line2Mother = affiliationParts[1] || "";
 
-  // Conteúdo visual exato do documento horizontal
+  // Conteúdo visual exato do documento horizontal que é exibido rotacionado em 90 graus (CDT padrão)
   const documentCard = (
     <article
       aria-label="Frente da Carteira Nacional de Habilitação Oficial"
-      className="relative flex aspect-[1.42] w-[460px] flex-col overflow-hidden rounded-md border border-[#1b3d2b] bg-[#eaf4eb] shadow-[0_12px_32px_-10px_rgba(20,83,45,0.3)] select-none text-slate-900"
+      className="relative flex aspect-[1.44] w-[460px] flex-col overflow-hidden rounded-md border border-[#1b3d2b] bg-[#eaf4eb] shadow-[0_12px_32px_-10px_rgba(20,83,45,0.3)] select-none text-slate-900"
       style={{
         backgroundImage: `
           radial-gradient(#b0d7b7 0.75px, transparent 0.75px),
@@ -83,19 +74,19 @@ export function CnhCardFront({
       }}
     >
       {/* 1. Tarja Superior Preta Oficial com Brasão, Textos e Selo BR */}
-      <header className="flex h-12 shrink-0 items-center justify-between bg-[#111914] px-3 text-white">
+      <header className="flex h-11 shrink-0 items-center justify-between bg-[#111914] px-3 text-white">
         {/* Brasão da República Federativa do Brasil */}
         <div className="flex items-center shrink-0">
-          <BrasaoRepublica className="h-8 w-8 text-amber-400 drop-shadow-xs" />
+          <BrasaoRepublica className="h-7 w-7 text-amber-400 drop-shadow-xs" />
         </div>
 
         {/* Textos Oficiais Centrais em Caixa Alta */}
         <div className="flex flex-col items-center justify-center text-center px-2">
-          <span className="text-[10px] font-black tracking-wider text-white uppercase leading-none">
+          <span className="text-[9.5px] font-black tracking-wider text-white uppercase leading-none">
             REPÚBLICA FEDERATIVA DO BRASIL
           </span>
           <span className="text-[7.5px] font-semibold tracking-wide text-slate-200 uppercase mt-0.5 leading-none">
-            MINISTÉRIO DA INFRAESTRUTURA
+            MINISTÉRIO DOS TRANSPORTES
           </span>
           <span className="text-[7px] font-semibold tracking-tight text-slate-300 uppercase mt-0.5 leading-none">
             SECRETARIA NACIONAL DE TRÂNSITO
@@ -104,13 +95,13 @@ export function CnhCardFront({
 
         {/* Selo Oval Oficial BR com Guilhochê */}
         <div className="flex items-center shrink-0">
-          <SeloBr className="h-7 w-10" />
+          <SeloBr className="h-6 w-9" />
         </div>
       </header>
 
       {/* 2. Sub-cabeçalho com o Título Oficial da CNH */}
       <div className="border-b border-[#2b533d]/40 bg-[#dff0e2]/90 py-0.5 text-center shrink-0">
-        <h2 className="text-[9px] font-black tracking-tight text-slate-900 uppercase leading-none">
+        <h2 className="text-[8.5px] font-black tracking-tight text-slate-900 uppercase leading-none">
           CARTEIRA NACIONAL DE HABILITAÇÃO / DRIVER LICENSE / PERMISO DE CONDUCCIÓN
         </h2>
       </div>
@@ -118,7 +109,7 @@ export function CnhCardFront({
       {/* 3. Corpo Principal do Documento */}
       <div className="flex flex-1 p-2 gap-2 overflow-hidden items-stretch">
         {/* Coluna Esquerda: Mapa + Tarja Vertical ("VÁLIDA EM TODO O TERRITÓRIO NACIONAL" + Nº) + Foto + Assinatura */}
-        <div className="flex w-[120px] shrink-0 flex-col justify-between">
+        <div className="flex w-[115px] shrink-0 flex-col justify-between">
           {/* Topo da coluna esquerda: Mapa do Brasil em Dourado */}
           <div className="flex items-center pl-1 pt-0.5">
             <MapaEstado className="h-7 w-7 text-[#c89632] drop-shadow-xs" />
@@ -132,62 +123,45 @@ export function CnhCardFront({
                 VÁLIDA EM TODO O TERRITÓRIO NACIONAL
               </span>
               <span className="font-mono text-[9px] font-black text-slate-950 tracking-wider">
-                {profile.formNumber || "2519950272"}
+                {profile.formNumber || "\u00A0"}
               </span>
             </div>
 
-            {/* Foto Oficial do Condutor (em pé, sem rotação) */}
-            <div className="relative aspect-[3/4] w-20 shrink-0 overflow-hidden rounded-[4px] border border-[#2b533d] bg-white p-0.5 shadow-xs">
+            {/* Foto Oficial do Condutor: Proporcional e com a cabeça voltada para a esquerda */}
+            <div className="relative aspect-[3/4] w-[74px] shrink-0 overflow-hidden rounded-[3px] border border-[#2b533d] bg-white shadow-xs">
               {profile.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element -- foto do condutor orientada normalmente
+                // eslint-disable-next-line @next/next/no-img-element -- foto rotacionada para que a cabeça aponte para a esquerda na tela
                 <img
                   src={profile.photo}
                   alt={`Foto de ${profile.name}`}
-                  className="h-full w-full object-cover rounded-[2px]"
+                  className="h-full w-full object-cover rotate-180 scale-110"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-slate-100 text-slate-400">
-                  <UserRound aria-hidden className="h-10 w-10 text-slate-400" />
-                </div>
+                <div className="flex h-full w-full items-center justify-center bg-white/70" />
               )}
             </div>
           </div>
 
-          {/* Base da coluna esquerda: Box da Assinatura do Portador */}
-          <div
-            onClick={onSign}
-            role={onSign ? "button" : undefined}
-            tabIndex={onSign ? 0 : undefined}
-            title={onSign ? "Clique para alterar ou desenhar a assinatura" : undefined}
-            className={`group relative flex h-10 w-full flex-col justify-between rounded-[4px] border border-[#2b533d] bg-white/95 px-1 py-0.5 shadow-xs transition-colors ${
-              onSign ? "cursor-pointer hover:border-emerald-600 hover:bg-emerald-50/40" : ""
-            }`}
-          >
+          {/* Base da coluna esquerda: Box da Assinatura do Portador (embaixo do rosto) */}
+          <div className="relative flex h-8 w-full flex-col justify-between rounded-[3px] border border-[#2b533d] bg-white/95 px-1 py-0.5 shadow-xs">
             {/* Assinatura Renderizada */}
-            <div className="flex h-6 w-full items-center justify-center overflow-hidden">
+            <div className="flex h-4 w-full items-center justify-center overflow-hidden">
               {profile.signature ? (
                 // eslint-disable-next-line @next/next/no-img-element -- assinatura gráfica do portador
                 <img
                   src={profile.signature}
                   alt="Assinatura do Portador"
-                  className="max-h-6 w-auto max-w-full object-contain"
+                  className="max-h-4 w-auto max-w-full object-contain"
                 />
               ) : (
-                <span className="font-serif italic text-[11px] font-bold text-slate-900 tracking-wide select-none leading-none">
-                  {profile.name}
-                </span>
+                <span className="text-[9px] text-transparent select-none">{"\u00A0"}</span>
               )}
             </div>
 
             {/* Rótulo 7 ASSINATURA DO PORTADOR */}
-            <div className="flex items-center justify-between">
-              <span className="text-[6px] font-black uppercase tracking-tight text-[#1e4632] leading-none">
-                7 ASSINATURA DO PORTADOR
-              </span>
-              {onSign && (
-                <Edit3 className="h-2.5 w-2.5 text-slate-400 group-hover:text-emerald-700 transition-colors" />
-              )}
-            </div>
+            <span className="text-[5.5px] font-black uppercase tracking-tight text-[#1e4632] leading-none text-center">
+              7 ASSINATURA DO PORTADOR
+            </span>
           </div>
         </div>
 
@@ -203,7 +177,7 @@ export function CnhCardFront({
             />
             <CnhBox
               label="1ª HABILITAÇÃO"
-              value={profile.firstLicenseDate || "08/07/1976"}
+              value={profile.firstLicenseDate}
               className="col-span-4 text-center"
               valueClassName="text-[9.5px] font-black text-center"
             />
@@ -212,7 +186,7 @@ export function CnhCardFront({
           {/* Linha 2: 3 Data, Local e UF de Nascimento */}
           <CnhBox
             label="3 DATA, LOCAL E UF DE NASCIMENTO"
-            value={`${profile.birthDate}, ${profile.birthPlace}`}
+            value={profile.birthDate ? `${profile.birthDate}${profile.birthPlace ? `, ${profile.birthPlace}` : ""}` : ""}
             valueClassName="text-[9.5px] font-black"
           />
 
@@ -220,7 +194,7 @@ export function CnhCardFront({
           <div className="grid grid-cols-12 gap-1 items-stretch">
             <CnhBox
               label="4a DATA EMISSÃO"
-              value={profile.issueDate || "06/01/2023"}
+              value={profile.issueDate}
               className="col-span-4"
               valueClassName="text-[9px] font-black"
             />
@@ -234,9 +208,9 @@ export function CnhCardFront({
               <AccSecurityHatch />
             </div>
             {/* Box Categoria da CNH */}
-            <div className="col-span-2 flex flex-col justify-center items-center rounded-[4px] border border-[#2b533d] bg-white/95 px-0.5 shadow-xs">
+            <div className="col-span-2 flex flex-col justify-center items-center rounded-[3px] border border-[#2b533d] bg-white/95 px-0.5 shadow-xs">
               <span className="text-[13px] font-black uppercase text-slate-950 leading-none">
-                {profile.category || "D"}
+                {profile.category || "\u00A0"}
               </span>
             </div>
           </div>
@@ -264,7 +238,7 @@ export function CnhCardFront({
             />
             <CnhBox
               label="9 CAT HAB"
-              value={profile.category || "AB"}
+              value={profile.category}
               className="col-span-3 text-center"
               valueClassName="text-[9.5px] font-black text-red-600 text-center"
             />
@@ -273,24 +247,22 @@ export function CnhCardFront({
           {/* Linha 6: Nacionalidade */}
           <CnhBox
             label="NACIONALIDADE"
-            value={profile.nationality || "BRASILEIRO"}
+            value={profile.nationality}
             valueClassName="text-[9.5px] font-black"
           />
 
           {/* Linha 7: Filiação (2 Linhas Oficiais) */}
-          <div className="flex flex-col justify-between rounded-[4px] border border-[#2b533d] bg-white/85 px-1.5 py-0.5 shadow-xs">
+          <div className="flex flex-col justify-between rounded-[3px] border border-[#2b533d] bg-white/85 px-1.5 py-0.5 shadow-xs">
             <span className="text-[6.5px] font-bold uppercase tracking-tight text-[#1e4632] leading-none">
               FILIAÇÃO
             </span>
-            <div className="flex flex-col leading-tight mt-0.5">
+            <div className="flex flex-col leading-tight mt-0.5 min-h-[22px]">
               <span className="truncate text-[9px] font-black uppercase text-slate-950">
-                {line1Father}
+                {line1Father || "\u00A0"}
               </span>
-              {line2Mother && (
-                <span className="truncate text-[9px] font-black uppercase text-slate-950 mt-0.5">
-                  {line2Mother}
-                </span>
-              )}
+              <span className="truncate text-[9px] font-black uppercase text-slate-950 mt-0.5">
+                {line2Mother || "\u00A0"}
+              </span>
             </div>
           </div>
         </div>
@@ -298,21 +270,10 @@ export function CnhCardFront({
     </article>
   );
 
-  // Se o modo for "de lado" (padrão CDT conforme solicitado pelo usuário):
-  if (isSideways) {
-    return (
-      <div className="relative flex h-[480px] w-full items-center justify-center overflow-visible">
-        <div className="shrink-0 -rotate-90 origin-center transition-transform duration-300">
-          {documentCard}
-        </div>
-      </div>
-    );
-  }
-
-  // Modo horizontal (reto):
+  // Renderização 100% deitada no padrão CDT oficial (90 graus em sentido horário):
   return (
-    <div className="flex w-full justify-center overflow-x-auto py-2">
-      <div className="shrink-0 transition-transform duration-300">
+    <div className="relative flex h-[480px] w-full items-center justify-center overflow-visible">
+      <div className="shrink-0 rotate-90 origin-center transition-transform duration-300">
         {documentCard}
       </div>
     </div>
@@ -320,13 +281,7 @@ export function CnhCardFront({
 }
 
 /** Verso da CNH oficial brasileira com tabela de categorias e observações */
-export function CnhCardBack({
-  profile,
-  isSideways = true,
-}: {
-  profile: Profile;
-  isSideways?: boolean;
-}) {
+export function CnhCardBack({ profile }: { profile: Profile }) {
   const isA = profile.category.toUpperCase().includes("A");
   const isB = profile.category.toUpperCase().includes("B");
   const isC = profile.category.toUpperCase().includes("C");
@@ -345,7 +300,7 @@ export function CnhCardBack({
   const documentCard = (
     <article
       aria-label="Verso da Carteira Nacional de Habilitação Oficial"
-      className="relative flex aspect-[1.42] w-[460px] flex-col justify-between overflow-hidden rounded-md border border-[#1b3d2b] bg-[#eaf4eb] p-2.5 shadow-[0_12px_32px_-10px_rgba(20,83,45,0.3)] select-none text-slate-900"
+      className="relative flex aspect-[1.44] w-[460px] flex-col justify-between overflow-hidden rounded-md border border-[#1b3d2b] bg-[#eaf4eb] p-2.5 shadow-[0_12px_32px_-10px_rgba(20,83,45,0.3)] select-none text-slate-900"
       style={{
         backgroundImage: `
           radial-gradient(#b0d7b7 0.75px, transparent 0.75px),
@@ -387,18 +342,18 @@ export function CnhCardBack({
       <div className="flex flex-col gap-1">
         <CnhBox
           label="12 OBSERVAÇÕES"
-          value={profile.observations || "EAR — EXERCE ATIVIDADE REMUNERADA"}
+          value={profile.observations}
           valueClassName="text-[9px] font-black"
         />
         <div className="grid grid-cols-2 gap-1">
           <CnhBox
             label="LOCAL DE EMISSÃO"
-            value={profile.birthPlace || "UBERLANDIA, MG"}
+            value={profile.birthPlace}
             valueClassName="text-[9px]"
           />
           <CnhBox
             label="ÓRGÃO EMISSOR"
-            value={`DETRAN-${profile.state || "MG"}`}
+            value={profile.state ? `DETRAN-${profile.state}` : ""}
             valueClassName="text-[9px]"
           />
         </div>
@@ -406,25 +361,15 @@ export function CnhCardBack({
 
       {/* Faixa MRZ (Machine Readable Zone) do Verso Oficial */}
       <div className="mt-1 rounded-[3px] bg-white/90 p-1 font-mono text-[7px] font-bold tracking-widest text-slate-700 leading-none">
-        <div>{`I<BRA${profile.formNumber || "2519950272"}<<<<<<<<<<<<<<<`}</div>
-        <div className="mt-0.5">{`5801262M2801062BRA<<<<<<<<<<<${profile.registerNumber?.slice(-1) || "1"}`}</div>
+        <div>{`I<BRA${profile.formNumber || "0000000000"}<<<<<<<<<<<<<<<`}</div>
+        <div className="mt-0.5">{`0000000M0000000BRA<<<<<<<<<<<${profile.registerNumber?.slice(-1) || "0"}`}</div>
       </div>
     </article>
   );
 
-  if (isSideways) {
-    return (
-      <div className="relative flex h-[480px] w-full items-center justify-center overflow-visible">
-        <div className="shrink-0 -rotate-90 origin-center transition-transform duration-300">
-          {documentCard}
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex w-full justify-center overflow-x-auto py-2">
-      <div className="shrink-0 transition-transform duration-300">
+    <div className="relative flex h-[480px] w-full items-center justify-center overflow-visible">
+      <div className="shrink-0 rotate-90 origin-center transition-transform duration-300">
         {documentCard}
       </div>
     </div>
@@ -454,7 +399,7 @@ export function CnhVioQrSlide({ profile }: { profile: Profile }) {
 
       <div className="flex flex-col gap-0.5 text-center">
         <span className="font-mono text-[10px] font-bold text-slate-800">
-          RENACH: {profile.registerNumber}
+          RENACH: {profile.registerNumber || "00000000000"}
         </span>
         <span className="text-[9px] text-slate-500">
           Certificação digital assinada pelo SERPRO
@@ -481,31 +426,33 @@ export function CnhDetailsSlide({ profile }: { profile: Profile }) {
       <div className="flex flex-col gap-2 py-2 text-xs">
         <div className="flex justify-between border-b border-slate-100 pb-1">
           <span className="text-slate-500">Nome:</span>
-          <span className="font-bold text-right">{profile.name}</span>
+          <span className="font-bold text-right">{profile.name || "—"}</span>
         </div>
         <div className="flex justify-between border-b border-slate-100 pb-1">
           <span className="text-slate-500">CPF:</span>
-          <span className="font-mono font-bold">{profile.cpf}</span>
+          <span className="font-mono font-bold">{profile.cpf || "—"}</span>
         </div>
         <div className="flex justify-between border-b border-slate-100 pb-1">
           <span className="text-slate-500">RG / UF:</span>
-          <span className="font-bold">{profile.rg}</span>
+          <span className="font-bold">{profile.rg || "—"}</span>
         </div>
         <div className="flex justify-between border-b border-slate-100 pb-1">
           <span className="text-slate-500">Nº Registro:</span>
-          <span className="font-mono font-bold">{profile.registerNumber}</span>
+          <span className="font-mono font-bold">{profile.registerNumber || "—"}</span>
         </div>
         <div className="flex justify-between border-b border-slate-100 pb-1">
           <span className="text-slate-500">Categoria:</span>
-          <span className="font-black text-emerald-800">{profile.category}</span>
+          <span className="font-black text-emerald-800">{profile.category || "—"}</span>
         </div>
         <div className="flex justify-between border-b border-slate-100 pb-1">
           <span className="text-slate-500">Validade CNH:</span>
-          <span className="font-bold text-emerald-700">{profile.validUntil}</span>
+          <span className="font-bold text-emerald-700">{profile.validUntil || "—"}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-slate-500">Situação:</span>
-          <span className="font-bold text-emerald-600">REGULAR</span>
+          <span className="font-bold text-emerald-600">
+            {profile.name ? "REGULAR" : "PENDENTE DE PREENCHIMENTO"}
+          </span>
         </div>
       </div>
 

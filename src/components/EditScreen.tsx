@@ -1,9 +1,9 @@
 // Hello World
 "use client";
 
-import { Camera, Check, PenTool, RotateCcw, Sparkles, UserRound } from "lucide-react";
+import { Camera, Check, Dices, PenTool, RotateCcw, Trash2, UserRound } from "lucide-react";
 import { useId, useState, type ChangeEvent, type FormEvent } from "react";
-import { defaultProfile, referenceProfile, profileSchema, resizeImage, type Profile } from "@/lib/profile";
+import { defaultProfile, emptyProfile, generateRandomProfile, profileSchema, resizeImage, type Profile } from "@/lib/profile";
 import { ScreenHeader } from "./ScreenHeader";
 import { SignatureModal } from "./SignatureModal";
 
@@ -359,23 +359,33 @@ export function EditScreen({ profile, onBack, onSave }: Props) {
                 />
               </div>
 
-              {/* Botão de Preenchimento da CNH de Referência da Foto */}
-              <button
-                type="button"
-                onClick={() => {
-                  setDraft((prev) => ({
-                    ...prev,
-                    ...referenceProfile,
-                    photo: prev.photo || referenceProfile.photo,
-                    signature: prev.signature || referenceProfile.signature,
-                  }));
-                  setStatus("Dados da CNH de Referência (Odair Fabian) carregados! Clique em Salvar.");
-                }}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-emerald-600 bg-emerald-50 px-3 text-xs font-bold text-emerald-800 hover:bg-emerald-100 cursor-pointer transition-colors"
-              >
-                <Sparkles className="h-4 w-4 text-emerald-600" />
-                Preencher dados da CNH de Referência (Odair Fabian)
-              </button>
+              {/* Botões de Ação Rápida: Dados Aleatórios e Limpar Tudo (Zerado) */}
+              <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const randomData = generateRandomProfile();
+                    setDraft(randomData);
+                    setStatus("Informações aleatórias geradas! Clique em Salvar Alterações.");
+                  }}
+                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-blue-600 bg-blue-50 px-3 text-xs font-bold text-blue-900 hover:bg-blue-100 cursor-pointer transition-colors"
+                >
+                  <Dices className="h-4 w-4 text-blue-700" />
+                  Preencher com dados aleatórios
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDraft(emptyProfile);
+                    setStatus("Todas as informações foram zeradas (em branco)! Clique em Salvar Alterações.");
+                  }}
+                  className="flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-slate-50 px-4 text-xs font-bold text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors"
+                >
+                  <Trash2 className="h-4 w-4 text-slate-600" />
+                  Deixar zerado
+                </button>
+              </div>
             </div>
           )}
 

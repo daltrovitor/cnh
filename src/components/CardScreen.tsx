@@ -1,13 +1,12 @@
 // Hello World
 "use client";
 
-import { Check, PenTool, RotateCw, ShieldCheck, X } from "lucide-react";
+import { ShieldCheck, X } from "lucide-react";
 import { useRef, useState } from "react";
 import type { Profile } from "@/lib/profile";
 import { ScreenHeader } from "./ScreenHeader";
 import { CnhCardFront, CnhCardBack, CnhVioQrSlide, CnhDetailsSlide } from "./CnhCard";
 import { IconCnhHistorico } from "./BrasaoRepublica";
-import { SignatureModal } from "./SignatureModal";
 
 const SLIDES = [
   { id: "frente", label: "Frente da CNH" },
@@ -19,7 +18,6 @@ const SLIDES = [
 export function CardScreen({
   profile,
   onBack,
-  onSave,
 }: {
   profile: Profile;
   onBack: () => void;
@@ -28,9 +26,6 @@ export function CardScreen({
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [historyOpen, setHistoryOpen] = useState(false);
-  const [isSideways, setIsSideways] = useState(true); // Padrão CDT ("de lado" conforme solicitado)
-  const [signatureModalOpen, setSignatureModalOpen] = useState(false);
-  const [signatureSuccessToast, setSignatureSuccessToast] = useState(false);
 
   function handleScroll() {
     const el = trackRef.current;
@@ -47,73 +42,32 @@ export function CardScreen({
     setActive(index);
   }
 
-  function handleSaveSignature(signatureDataUrl: string) {
-    const updated: Profile = {
-      ...profile,
-      signature: signatureDataUrl,
-    };
-    onSave?.(updated);
-    setSignatureSuccessToast(true);
-    setTimeout(() => {
-      setSignatureSuccessToast(false);
-    }, 2500);
-  }
-
   return (
     <div className="screen-in flex min-h-dvh flex-col bg-[#f5f6fa] select-none">
-      {/* Cabeçalho Oficial Navy exato da referência visual */}
-      <ScreenHeader title="HABILITAÇÃO" onBack={onBack} />
+      {/* Cabeçalho Oficial Navy exato da referência visual (Imagem 4) */}
+      <ScreenHeader
+        title="HABILITAÇÃO"
+        subtitle={profile.name ? `${profile.name.toUpperCase()} / ${profile.state || "SP"}` : ""}
+        onBack={onBack}
+      />
 
       <main className="flex flex-1 flex-col pb-6">
-        {/* Barra de utilidades superiores: Aviso Vio + Controles Rápidos */}
-        <div className="flex flex-col gap-2 px-4 pt-2 pb-1">
-          <div className="text-center">
-            <p className="text-[12.5px] font-medium text-[#19234e]">
-              Verifique autenticidade do QR Code com o app{" "}
-              <a
-                href="https://servicos.serpro.gov.br/vio/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold text-[#1d4ed8] underline hover:text-blue-800"
-              >
-                Vio
-              </a>
-            </p>
-          </div>
-
-          {/* Botões de Ação Rápida: Girar Documento & Assinar Carteira */}
-          <div className="flex items-center justify-between gap-2 pt-0.5">
-            {/* Alternar Visualização: De Lado (CDT) vs Reto */}
-            <button
-              type="button"
-              onClick={() => setIsSideways((s) => !s)}
-              className="flex h-9 items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3 text-xs font-bold text-[#19234e] shadow-xs hover:bg-slate-50 active:scale-98 cursor-pointer transition-all"
+        {/* Aviso Oficial Vio exato da Imagem 4 */}
+        <div className="pt-2 pb-1 px-4 text-center">
+          <p className="text-[12.5px] font-medium text-[#19234e]">
+            Verifique autenticidade do QR Code com o app{" "}
+            <a
+              href="https://servicos.serpro.gov.br/vio/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-[#1d4ed8] underline hover:text-blue-800"
             >
-              <RotateCw className="h-3.5 w-3.5 text-[#19234e]" />
-              <span>{isSideways ? "Exibir Reto" : "Exibir De Lado (CDT)"}</span>
-            </button>
-
-            {/* Criar / Alterar Assinatura do Portador */}
-            <button
-              type="button"
-              onClick={() => setSignatureModalOpen(true)}
-              className="flex h-9 items-center gap-1.5 rounded-full border border-[#19234e] bg-[#19234e] px-3.5 text-xs font-bold text-white shadow-xs hover:bg-blue-900 active:scale-98 cursor-pointer transition-all"
-            >
-              <PenTool className="h-3.5 w-3.5" />
-              <span>Assinar Carteira</span>
-            </button>
-          </div>
+              Vio
+            </a>
+          </p>
         </div>
 
-        {/* Notificação toast de assinatura gravada */}
-        {signatureSuccessToast && (
-          <div className="mx-4 mt-1 flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 py-1.5 px-3 text-xs font-bold text-white shadow-sm animate-in fade-in duration-200">
-            <Check className="h-3.5 w-3.5" />
-            <span>Assinatura estampada na CNH com sucesso!</span>
-          </div>
-        )}
-
-        {/* Carrossel da CNH com 4 Páginas Oficiais */}
+        {/* Carrossel da CNH com as 4 Páginas Oficiais */}
         <div
           ref={trackRef}
           onScroll={handleScroll}
@@ -121,14 +75,10 @@ export function CardScreen({
           aria-roledescription="carrossel"
         >
           <div className="w-full shrink-0 snap-center pb-1 flex justify-center">
-            <CnhCardFront
-              profile={profile}
-              isSideways={isSideways}
-              onSign={() => setSignatureModalOpen(true)}
-            />
+            <CnhCardFront profile={profile} />
           </div>
           <div className="w-full shrink-0 snap-center pb-1 flex justify-center">
-            <CnhCardBack profile={profile} isSideways={isSideways} />
+            <CnhCardBack profile={profile} />
           </div>
           <div className="w-full shrink-0 snap-center pb-1 flex justify-center">
             <CnhVioQrSlide profile={profile} />
@@ -138,11 +88,11 @@ export function CardScreen({
           </div>
         </div>
 
-        {/* Indicador de exatamente 4 pontos (Dots): ● ○ ○ ○ */}
+        {/* Indicador de 4 pontos (Dots) exato da Imagem 4: pílula ativa azul + bolinhas cinzas */}
         <div
           role="tablist"
           aria-label="Páginas da habilitação"
-          className="flex justify-center items-center gap-2 py-3"
+          className="flex justify-center items-center gap-1.5 py-3"
         >
           {SLIDES.map(({ id, label }, i) => (
             <button
@@ -152,20 +102,20 @@ export function CardScreen({
               aria-selected={active === i}
               aria-label={label}
               onClick={() => goTo(i)}
-              className="flex h-6 w-6 items-center justify-center p-0 cursor-pointer"
+              className="flex items-center justify-center p-1 cursor-pointer"
             >
               <span
-                className={`transition-all ${
+                className={`transition-all duration-300 ${
                   active === i
-                    ? "h-2 w-2 rounded-full bg-[#19234e]"
-                    : "h-2 w-2 rounded-full border border-slate-400 bg-white"
+                    ? "h-1.5 w-6 rounded-full bg-[#19234e]"
+                    : "h-1.5 w-1.5 rounded-full bg-slate-300"
                 }`}
               />
             </button>
           ))}
         </div>
 
-        {/* Botão Único Inferior Oficial */}
+        {/* Botão Único Inferior Oficial exato da Imagem 4 */}
         <div className="mt-auto flex flex-col px-4 pt-1">
           <button
             type="button"
@@ -181,15 +131,6 @@ export function CardScreen({
           </button>
         </div>
       </main>
-
-      {/* Modal Interativo de Desenho / Upload / Geração de Assinatura */}
-      <SignatureModal
-        isOpen={signatureModalOpen}
-        onClose={() => setSignatureModalOpen(false)}
-        onSave={handleSaveSignature}
-        currentSignature={profile.signature}
-        driverName={profile.name}
-      />
 
       {/* Modal Histórico de Emissões */}
       {historyOpen && (
@@ -217,19 +158,21 @@ export function CardScreen({
             <div className="mt-4 flex flex-col gap-3 text-xs">
               <div className="flex justify-between border-b border-slate-100 pb-2">
                 <span className="text-slate-500">1ª Emissão CNH:</span>
-                <span className="font-bold text-slate-800">{profile.firstLicenseDate}</span>
+                <span className="font-bold text-slate-800">{profile.firstLicenseDate || "—"}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 pb-2">
                 <span className="text-slate-500">Data de Emissão Atual:</span>
-                <span className="font-bold text-slate-800">{profile.issueDate || "06/01/2023"}</span>
+                <span className="font-bold text-slate-800">{profile.issueDate || "—"}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 pb-2">
                 <span className="text-slate-500">Validade Atual:</span>
-                <span className="font-bold text-emerald-700">{profile.validUntil}</span>
+                <span className="font-bold text-emerald-700">{profile.validUntil || "—"}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Status:</span>
-                <span className="font-bold text-emerald-600">ATIVO / EMITIDO</span>
+                <span className="font-bold text-emerald-600">
+                  {profile.name ? "ATIVO / EMITIDO" : "PENDENTE"}
+                </span>
               </div>
             </div>
           </div>

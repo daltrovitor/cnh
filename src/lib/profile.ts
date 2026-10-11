@@ -5,79 +5,137 @@ import { z } from "zod";
 export const profileSchema = z.object({
   photo: z.string().default(""),
   signature: z.string().default(""),
-  name: z.string().trim().min(1, "Informe o nome").max(70),
-  cpf: z.string().trim().min(1, "Informe o CPF").max(20),
-  rg: z.string().trim().min(1, "Informe o RG").max(30),
-  birthDate: z.string().trim().max(12),
-  birthPlace: z.string().trim().max(50),
-  validUntil: z.string().trim().max(12),
-  firstLicenseDate: z.string().trim().max(12),
-  registerNumber: z.string().trim().max(20),
-  category: z.string().trim().max(10),
-  securityCode: z.string().trim().max(20),
-  nationality: z.string().trim().max(40),
-  affiliation: z.string().trim().max(100),
-  observations: z.string().trim().max(60),
-  state: z.string().trim().max(10),
-  issueDate: z.string().trim().max(15).default("06/01/2023"),
-  formNumber: z.string().trim().max(25).default("2519950272"),
+  name: z.string().trim().max(70).default(""),
+  cpf: z.string().trim().max(20).default(""),
+  rg: z.string().trim().max(30).default(""),
+  birthDate: z.string().trim().max(12).default(""),
+  birthPlace: z.string().trim().max(50).default(""),
+  validUntil: z.string().trim().max(12).default(""),
+  firstLicenseDate: z.string().trim().max(12).default(""),
+  registerNumber: z.string().trim().max(20).default(""),
+  category: z.string().trim().max(10).default(""),
+  securityCode: z.string().trim().max(20).default(""),
+  nationality: z.string().trim().max(40).default(""),
+  affiliation: z.string().trim().max(100).default(""),
+  observations: z.string().trim().max(60).default(""),
+  state: z.string().trim().max(10).default(""),
+  issueDate: z.string().trim().max(15).default(""),
+  formNumber: z.string().trim().max(25).default(""),
 
   // Dados do veículo (CRLV-e)
-  renavam: z.string().trim().max(20),
-  plate: z.string().trim().max(12),
-  exerciseYear: z.string().trim().max(10),
-  manufactureYear: z.string().trim().max(10),
-  modelYear: z.string().trim().max(10),
-  crvNumber: z.string().trim().max(25),
-  claSecurityCode: z.string().trim().max(25),
-  cat: z.string().trim().max(15),
-  brandModel: z.string().trim().max(60),
-  vehicleType: z.string().trim().max(40),
-  previousPlate: z.string().trim().max(30),
-  chassis: z.string().trim().max(30),
-  color: z.string().trim().max(30),
-  fuel: z.string().trim().max(40),
+  renavam: z.string().trim().max(20).default(""),
+  plate: z.string().trim().max(12).default(""),
+  exerciseYear: z.string().trim().max(10).default(""),
+  manufactureYear: z.string().trim().max(10).default(""),
+  modelYear: z.string().trim().max(10).default(""),
+  crvNumber: z.string().trim().max(25).default(""),
+  claSecurityCode: z.string().trim().max(25).default(""),
+  cat: z.string().trim().max(15).default(""),
+  brandModel: z.string().trim().max(60).default(""),
+  vehicleType: z.string().trim().max(40).default(""),
+  previousPlate: z.string().trim().max(30).default(""),
+  chassis: z.string().trim().max(30).default(""),
+  color: z.string().trim().max(30).default(""),
+  fuel: z.string().trim().max(40).default(""),
 });
 
 export type Profile = z.infer<typeof profileSchema>;
 
-export const referenceProfile: Profile = {
+/** Perfil 100% Zerado (em branco) conforme solicitado pelo usuário */
+export const emptyProfile: Profile = {
   photo: "",
   signature: "",
-  name: "ODAIR ANTONIO FABIAN",
-  cpf: "273.125.186-72",
-  rg: "1437078 SSP MG",
-  birthDate: "26/01/1958",
-  birthPlace: "UBERLANDIA, MG",
-  validUntil: "06/01/2028",
-  firstLicenseDate: "08/07/1976",
-  registerNumber: "01085778251",
-  category: "AB",
-  securityCode: "01085778251",
-  nationality: "BRASILEIRO",
-  affiliation: "GERALDO ANTONIO / ALMINDA DO NASCIMENTO",
-  observations: "EAR — EXERCE ATIVIDADE REMUNERADA",
-  state: "MG",
-  issueDate: "06/01/2023",
-  formNumber: "2519950272",
+  name: "",
+  cpf: "",
+  rg: "",
+  birthDate: "",
+  birthPlace: "",
+  validUntil: "",
+  firstLicenseDate: "",
+  registerNumber: "",
+  category: "",
+  securityCode: "",
+  nationality: "",
+  affiliation: "",
+  observations: "",
+  state: "",
+  issueDate: "",
+  formNumber: "",
 
-  renavam: "00981246735",
-  plate: "BRA2E19",
-  exerciseYear: "2026",
-  manufactureYear: "2024",
-  modelYear: "2025",
-  crvNumber: "123894756102",
-  claSecurityCode: "876543210",
-  cat: "000000",
-  brandModel: "VW / POLO TRACK 1.0",
-  vehicleType: "PASSAGEIRO / AUTOMÓVEL",
-  previousPlate: "SÃO PAULO / SP",
-  chassis: "9BWCA11BZRP012345",
-  color: "BRANCA",
-  fuel: "ÁLCOOL / GASOLINA",
+  renavam: "",
+  plate: "",
+  exerciseYear: "",
+  manufactureYear: "",
+  modelYear: "",
+  crvNumber: "",
+  claSecurityCode: "",
+  cat: "",
+  brandModel: "",
+  vehicleType: "",
+  previousPlate: "",
+  chassis: "",
+  color: "",
+  fuel: "",
 };
 
-export const defaultProfile: Profile = referenceProfile;
+export const defaultProfile: Profile = emptyProfile;
+
+/** Gerador de informações aleatórias realistas para teste */
+export function generateRandomProfile(): Profile {
+  const firstNames = ["LUCAS", "GABRIEL", "MATEUS", "CAMILA", "BEATRIZ", "JULIANA", "RODRIGO", "FERNANDO", "LETICIA", "MARCELO"];
+  const lastNames = ["SILVA", "SANTOS", "OLIVEIRA", "SOUZA", "RODRIGUES", "FERREIRA", "ALVES", "PEREIRA", "LIMA", "GOMES"];
+  const cities = ["SÃO PAULO - SP", "RIO DE JANEIRO - RJ", "BELO HORIZONTE - MG", "CURITIBA - PR", "SALVADOR - BA", "BRASÍLIA - DF", "PORTO ALEGRE - RS"];
+  const categories = ["AB", "B", "A", "D", "C"];
+
+  const fn = firstNames[Math.floor(Math.random() * firstNames.length)];
+  const ln1 = lastNames[Math.floor(Math.random() * lastNames.length)];
+  const ln2 = lastNames[Math.floor(Math.random() * lastNames.length)];
+  const fullName = `${fn} ${ln1} ${ln2}`;
+
+  const father = `JOSÉ ${ln1}`;
+  const mother = `MARIA ${ln2}`;
+
+  const randDigits = (len: number) => Array.from({ length: len }, () => Math.floor(Math.random() * 10)).join("");
+
+  const city = cities[Math.floor(Math.random() * cities.length)];
+  const state = city.split(" - ")[1] || "SP";
+
+  return {
+    photo: "",
+    signature: "",
+    name: fullName,
+    cpf: `${randDigits(3)}.${randDigits(3)}.${randDigits(3)}-${randDigits(2)}`,
+    rg: `${randDigits(2)}.${randDigits(3)}.${randDigits(3)}-${randDigits(1)} SSP/${state}`,
+    birthDate: `1${Math.floor(Math.random() * 9)}/0${Math.floor(Math.random() * 8) + 1}/19${70 + Math.floor(Math.random() * 30)}`,
+    birthPlace: city,
+    validUntil: `10/05/203${Math.floor(Math.random() * 5)}`,
+    firstLicenseDate: `12/03/201${Math.floor(Math.random() * 9)}`,
+    registerNumber: randDigits(11),
+    category: categories[Math.floor(Math.random() * categories.length)],
+    securityCode: randDigits(11),
+    nationality: "BRASILEIRA",
+    affiliation: `${father} / ${mother}`,
+    observations: "EAR — EXERCE ATIVIDADE REMUNERADA",
+    state,
+    issueDate: "15/01/2024",
+    formNumber: randDigits(10),
+
+    renavam: randDigits(11),
+    plate: `BRA${Math.floor(Math.random() * 9)}E${randDigits(2)}`,
+    exerciseYear: "2026",
+    manufactureYear: "2023",
+    modelYear: "2024",
+    crvNumber: randDigits(12),
+    claSecurityCode: randDigits(9),
+    cat: "000000",
+    brandModel: "HYUNDAI / HB20 1.0M",
+    vehicleType: "PASSAGEIRO / AUTOMÓVEL",
+    previousPlate: city,
+    chassis: `9BW${randDigits(6)}ZP${randDigits(6)}`,
+    color: "PRATA",
+    fuel: "ÁLCOOL / GASOLINA",
+  };
+}
 
 const STORAGE_KEY = "cnh-digital:profile";
 const LEGACY_STORAGE_KEY = "campus-digital:profile";
