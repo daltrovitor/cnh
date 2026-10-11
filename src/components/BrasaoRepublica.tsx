@@ -76,11 +76,11 @@ export function SeloBr({ className = "h-8 w-11" }: { className?: string }) {
   );
 }
 
-/** Silhueta Oficial do Mapa do Brasil em Dourado/Âmbar idêntica à referência */
-export function MapaEstado({ className = "h-8 w-8 text-[#c89632]" }: { estado?: string; className?: string }) {
+/** Silhueta Oficial do Mapa em Dourado/Âmbar idêntica à foto de referência enviada */
+export function MapaEstado({ className = "h-8 w-8 text-[#c9972c]" }: { estado?: string; className?: string }) {
   return (
-    <svg viewBox="0 0 100 100" fill="currentColor" className={className} aria-label="Silhueta do Mapa do Brasil">
-      <path d="M48 6 C42 6, 36 8, 30 11 C26 13, 20 18, 14 20 C10 22, 6 26, 4 30 C3 34, 6 38, 10 40 C14 42, 17 40, 21 44 C24 47, 22 52, 24 56 C26 60, 31 62, 35 64 C38 67, 40 72, 43 76 C46 80, 48 86, 52 90 C54 93, 56 94, 57 91 C58 87, 56 82, 59 78 C62 74, 67 72, 70 68 C74 64, 76 58, 80 54 C85 50, 92 46, 94 40 C96 34, 91 30, 87 27 C83 24, 80 20, 75 18 C70 16, 64 12, 58 8 C55 6, 51 6, 48 6 Z" />
+    <svg viewBox="0 0 100 100" fill="currentColor" className={className} aria-label="Mapa Oficial do Estado Emissor">
+      <path d="M 52,8 C 60,7 68,10 74,15 C 78,19 82,24 81,28 C 79,31 84,35 86,40 C 88,46 83,52 81,57 C 78,63 75,69 70,75 C 66,81 58,89 54,92 C 50,91 46,85 43,80 C 39,74 34,70 32,65 C 29,61 24,59 20,56 C 15,52 9,50 6,47 C 3,44 4,40 9,38 C 16,36 23,35 27,31 C 31,27 34,21 38,16 C 42,12 46,9 52,8 Z" />
     </svg>
   );
 }
