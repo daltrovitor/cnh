@@ -30,16 +30,33 @@ export function CardScreen({
   function handleScroll() {
     const el = trackRef.current;
     if (!el) return;
-    const next = Math.round(el.scrollLeft / el.clientWidth);
-    if (next >= 0 && next < SLIDES.length) {
-      setActive(next);
+    const scrollLeft = el.scrollLeft;
+    const slides = Array.from(el.children) as HTMLElement[];
+    if (!slides.length) return;
+    const containerCenter = scrollLeft + el.clientWidth / 2;
+    let closestIndex = 0;
+    let minDiff = Infinity;
+    slides.forEach((slide, idx) => {
+      const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+      const diff = Math.abs(containerCenter - slideCenter);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIndex = idx;
+      }
+    });
+    if (closestIndex >= 0 && closestIndex < SLIDES.length) {
+      setActive(closestIndex);
     }
   }
 
   function goTo(index: number) {
     const el = trackRef.current;
-    el?.scrollTo({ left: index * el.clientWidth, behavior: "smooth" });
-    setActive(index);
+    if (!el) return;
+    const slides = el.children;
+    if (slides[index]) {
+      (slides[index] as HTMLElement).scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      setActive(index);
+    }
   }
 
   return (
@@ -67,23 +84,23 @@ export function CardScreen({
           </p>
         </div>
 
-        {/* Carrossel da CNH com as 4 Páginas Oficiais */}
+        {/* Carrossel da CNH com as 4 Páginas Oficiais separadas por gap-8 (sem colar os slides) */}
         <div
           ref={trackRef}
           onScroll={handleScroll}
-          className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto px-4 mt-1"
+          className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto gap-8 px-6 mt-1 scroll-smooth"
           aria-roledescription="carrossel"
         >
-          <div className="w-full shrink-0 snap-center pb-1 flex justify-center">
+          <div className="w-full shrink-0 snap-center py-2 flex justify-center items-center">
             <CnhCardFront profile={profile} />
           </div>
-          <div className="w-full shrink-0 snap-center pb-1 flex justify-center">
+          <div className="w-full shrink-0 snap-center py-2 flex justify-center items-center">
             <CnhCardBack profile={profile} />
           </div>
-          <div className="w-full shrink-0 snap-center pb-1 flex justify-center">
+          <div className="w-full shrink-0 snap-center py-2 flex justify-center items-center">
             <CnhVioQrSlide profile={profile} />
           </div>
-          <div className="w-full shrink-0 snap-center pb-1 flex justify-center">
+          <div className="w-full shrink-0 snap-center py-2 flex justify-center items-center">
             <CnhDetailsSlide profile={profile} />
           </div>
         </div>
