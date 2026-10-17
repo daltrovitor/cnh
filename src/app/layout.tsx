@@ -1,11 +1,19 @@
 // Hello World
 import type { Metadata, Viewport } from "next";
-import { Montserrat } from "next/font/google";
+import { Fira_Sans_Condensed, Montserrat } from "next/font/google";
 import "./globals.css";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// Fonte da impressão da CNH (humanista condensada, semibold)
+const cnhFont = Fira_Sans_Condensed({
+  variable: "--font-cnh",
+  subsets: ["latin"],
+  weight: ["500", "600"],
   display: "swap",
 });
 
@@ -35,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${montserrat.variable} antialiased`} suppressHydrationWarning>
+    <html lang="pt-BR" className={`${montserrat.variable} ${cnhFont.variable} antialiased`} suppressHydrationWarning>
       <body className="min-h-dvh bg-[#f8fafc] font-sans antialiased" suppressHydrationWarning>
         {children}
       </body>
