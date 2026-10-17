@@ -18,14 +18,16 @@ export function isDocumentationComplete(profile: Profile): boolean {
 }
 
 /**
- * Frente da CNH Oficial Brasileira (Modelo 2022+) — Orientada na vertical (345px × 488px),
- * com a foto na parte superior e a cabeça do condutor virada para a direita, exatamente
- * conforme o formato oficial e solicitado pelo usuário.
+ * Frente da CNH Oficial Brasileira (Modelo 2022+) — Orientada na vertical com proporção
+ * exata do documento (692×955), responsiva para preencher a largura disponível.
+ * Foto na parte superior, cabeça virada para a direita.
  *
- * Máscaras opacas calibradas pixel a pixel na COR EXATA DO DOCUMENTO (#ebf5ea — verde suave
- * do papel de segurança) garantem que os dados de teste da imagem original NUNCA apareçam.
- * Se a documentação não estiver completa, o documento fica 100% em branco. Quando completa,
- * as informações, a foto e a assinatura são sobrepostas com perfeição geométrica na mesma tipografia.
+ * Máscaras opacas calibradas pixel a pixel com sharp (coordenadas medidas via
+ * scripts/measure_fields.js) na COR EXATA DO DOCUMENTO (#eaf5ee — verde suave do papel
+ * de segurança) garantem que os dados de teste da imagem original NUNCA apareçam.
+ * Se a documentação não estiver completa, o documento fica 100% em branco.
+ * Quando completa, as informações, a foto e a assinatura são sobrepostas com perfeição
+ * geométrica na mesma tipografia (Arial 400 regular), idêntica à impressão oficial.
  */
 export function CnhCardFront({ profile }: { profile: Profile }) {
   const isComplete = isDocumentationComplete(profile);
@@ -40,245 +42,299 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
     .filter(Boolean)
     .join(", ");
 
-  const categoryInitial = profile.category
-    ? profile.category.trim().charAt(0)
-    : "B";
-
-  // Cor verde exata do documento atrás das letras: #ebf5ea
-  const docGreen = "bg-[#ebf5ea]";
+  // Cor verde exata do documento atrás das letras: #eaf5ee
+  const docGreen = "bg-[#eaf5ee]";
+  // Fonte idêntica à impressão oficial da CNH: Arial regular (400), não bold
+  const fontStyle: React.CSSProperties = {
+    fontFamily: "Arial, 'Helvetica Neue', Helvetica, sans-serif",
+    fontWeight: 400,
+    letterSpacing: "0.01em",
+  };
 
   return (
     <article
       aria-label="Frente da Carteira Nacional de Habilitação Oficial"
-      className="relative select-none overflow-hidden rounded-md shadow-[0_12px_32px_-10px_rgba(20,83,45,0.3)] border border-[#1b3d2b]/30 bg-[#ebf5ea]"
-      style={{ width: 345, height: 488 }}
+      className="relative select-none overflow-hidden rounded-md shadow-[0_12px_32px_-10px_rgba(20,83,45,0.3)] border border-[#1b3d2b]/30 bg-[#eaf5ee] w-full aspect-[692/955] max-w-full"
     >
-      {/* 
-        Container interno rotacionado 90° no sentido horário:
-        - A foto vai para cima
-        - A cabeça da pessoa fica virada para a direita
-        - O documento fica na vertical (345px × 488px)
-        - Todos os campos e camadas giram perfeitamente alinhados
-      */}
+      {/* ═══ CAMADA 0: Imagem oficial do documento de habilitação vertical ═══ */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/cnh-template-vertical.png"
+        alt="Modelo Oficial da CNH Brasileira"
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+        draggable={false}
+      />
+
+      {/* ═══ CAMADA 1: Box 2 e 1 NOME E SOBRENOME ═══
+          Medido: data value x=535-559, y=170-506 → left:77.3% top:17.8% w:3.6% h:35.3%
+          Overlay cobre a faixa de dados com margem para nomes mais longos */}
       <div
-        className="absolute top-0 left-0 origin-top-left"
-        style={{
-          width: 488,
-          height: 345,
-          transform: "translate(345px, 0px) rotate(90deg)",
-          containerType: "inline-size",
-        }}
+        className={`absolute ${docGreen} flex items-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "17.8%", left: "77.0%", width: "3.8%", height: "35.5%" }}
       >
-        {/* ═══ CAMADA 0: Imagem oficial do documento de habilitação ═══ */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/cnh-template-base.png"
-          alt="Modelo Oficial da CNH Brasileira"
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover pointer-events-none"
-          draggable={false}
-        />
+        {isComplete && profile.name ? (
+          <span
+            className="uppercase truncate leading-none text-black text-[9px]"
+            style={fontStyle}
+          >
+            {profile.name}
+          </span>
+        ) : null}
+      </div>
 
-        {/* ═══ CAMADA 1: Box 2 e 1 NOME E SOBRENOME ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center px-1 overflow-hidden z-10`}
-          style={{ top: "26.5%", left: "18.2%", width: "62.2%", height: "4.5%" }}
-        >
-          {isComplete && profile.name ? (
-            <span className="font-sans font-bold text-black text-[2.6cqw] uppercase truncate leading-none">
-              {profile.name}
-            </span>
-          ) : null}
-        </div>
+      {/* ═══ CAMADA 2: Box 1ª HABILITAÇÃO ═══
+          Medido: data value x=542-559, y=792-916 → left:78.3% top:82.9% w:2.6% h:13.1% */}
+      <div
+        className={`absolute ${docGreen} flex items-center justify-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "83.0%", left: "77.0%", width: "3.8%", height: "13.0%" }}
+      >
+        {isComplete && profile.firstLicenseDate ? (
+          <span
+            className="truncate leading-none text-black text-[8px] text-center"
+            style={fontStyle}
+          >
+            {profile.firstLicenseDate}
+          </span>
+        ) : null}
+      </div>
 
-        {/* ═══ CAMADA 2: Box 1ª HABILITAÇÃO ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center justify-center px-1 overflow-hidden z-10`}
-          style={{ top: "26.5%", left: "82.0%", width: "16.0%", height: "4.5%" }}
-        >
-          {isComplete && profile.firstLicenseDate ? (
-            <span className="font-sans font-bold text-black text-[2.5cqw] truncate leading-none text-center">
-              {profile.firstLicenseDate}
-            </span>
-          ) : null}
-        </div>
+      {/* ═══ CAMADA 3: Foto do Condutor ═══
+          Medido: foto original x=155-514, y=30-269 → left:22.4% top:3.1% w:52.0% h:25.1%
+          Deslocada um pouco para baixo conforme feedback para cobrir foto original inteira */}
+      <div
+        className={`absolute ${docGreen} overflow-hidden z-10 flex items-center justify-center`}
+        style={{ top: "3.0%", left: "22.0%", width: "53.0%", height: "25.5%" }}
+      >
+        {isComplete && profile.photo ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={profile.photo}
+            alt={`Foto de ${profile.name || "Condutor"}`}
+            className="h-full w-full object-cover rotate-90"
+          />
+        ) : (
+          <div className={`h-full w-full ${docGreen}`} />
+        )}
+      </div>
 
-        {/* ═══ CAMADA 3: Foto do Condutor (3x4) ═══ */}
-        <div
-          className={`absolute ${docGreen} overflow-hidden z-10`}
-          style={{ top: "32.2%", left: "17.4%", width: "25.8%", height: "52.2%" }}
-        >
-          {isComplete && profile.photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={profile.photo}
-              alt={`Foto de ${profile.name || "Condutor"}`}
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className={`h-full w-full ${docGreen}`} />
-          )}
-        </div>
+      {/* ═══ CAMADA 4: Assinatura do Portador ═══
+          Medido: assinatura original x=45-159, y=30-269 → left:6.5% top:3.1% w:16.6% h:25.1%
+          Background branco conforme solicitado pelo usuário */}
+      <div
+        className="absolute bg-white flex items-center justify-center overflow-hidden z-10"
+        style={{ top: "3.0%", left: "6.2%", width: "15.5%", height: "25.5%" }}
+      >
+        {isComplete && profile.signature ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={profile.signature}
+            alt="Assinatura do Portador"
+            className="max-h-full max-w-full object-contain p-0.5 rotate-90"
+          />
+        ) : (
+          <div className="h-full w-full bg-white" />
+        )}
+      </div>
 
-        {/* ═══ CAMADA 4: Assinatura do Portador ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center justify-center overflow-hidden z-10`}
-          style={{ top: "84.8%", left: "17.4%", width: "25.8%", height: "10.4%" }}
-        >
-          {isComplete && profile.signature ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={profile.signature}
-              alt="Assinatura do Portador"
-              className="max-h-full max-w-full object-contain p-0.5"
-            />
-          ) : (
-            <div className={`h-full w-full ${docGreen}`} />
-          )}
-        </div>
+      {/* ═══ CAMADA 5: Numeração Vertical de Segurança (Nº Espelho) ═══
+          Medido: x=17-44, y=340-942 → left:2.5% top:35.6% w:4.0% h:63.1% */}
+      <div
+        className={`absolute ${docGreen} flex items-center justify-center overflow-hidden z-10`}
+        style={{ top: "35.5%", left: "2.3%", width: "4.2%", height: "63.5%" }}
+      >
+        {isComplete && profile.formNumber ? (
+          <span
+            className="text-black text-[7.5px] [writing-mode:vertical-rl] rotate-180 tracking-[0.16em] whitespace-nowrap"
+            style={fontStyle}
+          >
+            {profile.formNumber}
+          </span>
+        ) : (
+          <div className={`h-full w-full ${docGreen}`} />
+        )}
+      </div>
 
-        {/* ═══ CAMADA 5: Numeração Vertical de Segurança ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center justify-center overflow-hidden z-10`}
-          style={{ top: "57.0%", left: "7.2%", width: "8.8%", height: "39.5%" }}
-        >
-          {isComplete && profile.formNumber ? (
-            <span className="font-sans font-bold text-black text-[2.2cqw] [writing-mode:vertical-rl] rotate-180 tracking-[0.16em] whitespace-nowrap">
-              {profile.formNumber}
-            </span>
-          ) : (
-            <div className={`h-full w-full ${docGreen}`} />
-          )}
-        </div>
+      {/* ═══ CAMADA 6: Box 3 DATA, LOCAL E UF DE NASCIMENTO ═══
+          Medido: data value x=460-499, y=260-942 → left:66.5% top:27.2% w:5.8% h:71.5%
+          Label (campo) x=490-519 está à direita; overlay cobre só o valor (esquerda do label) */}
+      <div
+        className={`absolute ${docGreen} flex items-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "27.2%", left: "66.2%", width: "4.0%", height: "70.5%" }}
+      >
+        {isComplete && birthText ? (
+          <span
+            className="uppercase truncate leading-none text-black text-[8px]"
+            style={fontStyle}
+          >
+            {birthText}
+          </span>
+        ) : null}
+      </div>
 
-        {/* ═══ CAMADA 6: Box 3 DATA, LOCAL E UF DE NASCIMENTO ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center px-1 overflow-hidden z-10`}
-          style={{ top: "34.8%", left: "45.8%", width: "52.4%", height: "4.5%" }}
-        >
-          {isComplete && birthText ? (
-            <span className="font-sans font-bold text-black text-[2.4cqw] uppercase truncate leading-none">
-              {birthText}
-            </span>
-          ) : null}
-        </div>
+      {/* ═══ CAMADA 7: Box 4a DATA EMISSÃO ═══
+          Medido: data value x=395-434, y=260-519 → left:57.1% top:27.2% w:5.8% h:27.2%
+          Posição perfeita conforme feedback, apenas fonte corrigida */}
+      <div
+        className={`absolute ${docGreen} flex items-center justify-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "27.2%", left: "57.0%", width: "4.0%", height: "27.0%" }}
+      >
+        {isComplete && profile.issueDate ? (
+          <span
+            className="truncate leading-none text-black text-[8px] text-center"
+            style={fontStyle}
+          >
+            {profile.issueDate}
+          </span>
+        ) : null}
+      </div>
 
-        {/* ═══ CAMADA 7: Box 4a DATA EMISSÃO ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center justify-center px-1 overflow-hidden z-10`}
-          style={{ top: "42.8%", left: "45.8%", width: "16.4%", height: "4.5%" }}
-        >
-          {isComplete && profile.issueDate ? (
-            <span className="font-sans font-bold text-black text-[2.4cqw] truncate leading-none text-center">
-              {profile.issueDate}
-            </span>
-          ) : null}
-        </div>
+      {/* ═══ CAMADA 8: Box 4b VALIDADE (Destaque Vermelho Oficial) ═══
+          Medido: data value x=395-434, y=510-724 → left:57.1% top:53.4% w:5.8% h:22.5%
+          Corrigido para não sobrepor lado esquerdo */}
+      <div
+        className={`absolute ${docGreen} flex items-center justify-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "53.5%", left: "57.0%", width: "4.0%", height: "22.0%" }}
+      >
+        {isComplete && profile.validUntil ? (
+          <span
+            className="truncate leading-none text-[#c01818] text-[8px] text-center"
+            style={fontStyle}
+          >
+            {profile.validUntil}
+          </span>
+        ) : null}
+      </div>
 
-        {/* ═══ CAMADA 8: Box 4b VALIDADE (Destaque Vermelho Oficial) ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center justify-center px-1 overflow-hidden z-10`}
-          style={{ top: "42.8%", left: "63.8%", width: "16.4%", height: "4.5%" }}
-        >
-          {isComplete && profile.validUntil ? (
-            <span className="font-sans font-bold text-[#c01818] text-[2.4cqw] truncate leading-none text-center">
-              {profile.validUntil}
-            </span>
-          ) : null}
-        </div>
+      {/* ═══ CAMADA 9: Letra da Categoria ao lado do ACC (D) ═══
+          Medido: ACC area x=390-439, y=720-942 → left:56.4% top:75.4% w:7.2% h:23.4% */}
+      <div
+        className={`absolute ${docGreen} flex items-center justify-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "92.0%", left: "56.5%", width: "5.5%", height: "5.0%" }}
+      >
+        {isComplete && profile.category ? (
+          <span
+            className="text-black text-[14px] leading-none text-center"
+            style={fontStyle}
+          >
+            {profile.category?.trim().charAt(0) || "B"}
+          </span>
+        ) : null}
+      </div>
 
-        {/* ═══ CAMADA 9: Letra da Categoria ao lado do ACC ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center justify-center overflow-hidden z-10`}
-          style={{ top: "41.5%", left: "92.5%", width: "5.6%", height: "5.8%" }}
-        >
-          {isComplete && profile.category ? (
-            <span className="font-sans font-black text-black text-[3.8cqw] leading-none">
-              {categoryInitial}
-            </span>
-          ) : null}
-        </div>
+      {/* ═══ CAMADA 10: Box 4c DOC IDENTIDADE / ÓRG EMISSOR / UF ═══
+          Medido: data value x=325-369, y=340-942 → left:47.0% top:35.6% w:6.5% h:63.1%
+          Corrigido top para não sobrepor em cima */}
+      <div
+        className={`absolute ${docGreen} flex items-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "35.5%", left: "47.0%", width: "4.5%", height: "63.0%" }}
+      >
+        {isComplete && profile.rg ? (
+          <span
+            className="uppercase truncate leading-none text-black text-[8px]"
+            style={fontStyle}
+          >
+            {profile.rg}
+          </span>
+        ) : null}
+      </div>
 
-        {/* ═══ CAMADA 10: Box 4c DOC IDENTIDADE / ÓRG EMISSOR / UF ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center px-1 overflow-hidden z-10`}
-          style={{ top: "50.8%", left: "45.8%", width: "52.4%", height: "4.5%" }}
-        >
-          {isComplete && profile.rg ? (
-            <span className="font-sans font-bold text-black text-[2.4cqw] uppercase truncate leading-none">
-              {profile.rg}
-            </span>
-          ) : null}
-        </div>
+      {/* ═══ CAMADA 11: Box 4d CPF ═══
+          Medido: data value x=265-304, y=260-519 → left:38.3% top:27.2% w:5.8% h:27.2%
+          Corrigido: descer (top maior), afastar do direito (left menor) */}
+      <div
+        className={`absolute ${docGreen} flex items-center justify-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "27.2%", left: "38.0%", width: "4.0%", height: "27.0%" }}
+      >
+        {isComplete && profile.cpf ? (
+          <span
+            className="truncate leading-none text-black text-[8px] text-center"
+            style={fontStyle}
+          >
+            {profile.cpf}
+          </span>
+        ) : null}
+      </div>
 
-        {/* ═══ CAMADA 11: Box 4d CPF ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center justify-center px-1 overflow-hidden z-10`}
-          style={{ top: "58.8%", left: "45.8%", width: "19.4%", height: "4.5%" }}
-        >
-          {isComplete && profile.cpf ? (
-            <span className="font-sans font-bold text-black text-[2.3cqw] truncate leading-none text-center">
-              {profile.cpf}
-            </span>
-          ) : null}
-        </div>
+      {/* ═══ CAMADA 12: Box 5 Nº REGISTRO (Destaque Vermelho Oficial) ═══
+          Medido: data value x=265-303, y=510-724 → left:38.3% top:53.4% w:5.6% h:22.5%
+          Corrigido: descer, afastar da esquerda */}
+      <div
+        className={`absolute ${docGreen} flex items-center justify-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "53.5%", left: "38.0%", width: "4.0%", height: "22.0%" }}
+      >
+        {isComplete && profile.registerNumber ? (
+          <span
+            className="truncate leading-none text-[#c01818] text-[8px] text-center"
+            style={fontStyle}
+          >
+            {profile.registerNumber}
+          </span>
+        ) : null}
+      </div>
 
-        {/* ═══ CAMADA 12: Box 5 Nº REGISTRO (Destaque Vermelho Oficial) ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center justify-center px-1 overflow-hidden z-10`}
-          style={{ top: "58.8%", left: "66.2%", width: "17.6%", height: "4.5%" }}
-        >
-          {isComplete && profile.registerNumber ? (
-            <span className="font-sans font-bold text-[#c01818] text-[2.3cqw] truncate leading-none text-center">
-              {profile.registerNumber}
-            </span>
-          ) : null}
-        </div>
+      {/* ═══ CAMADA 13: Box 9 CAT HAB (Destaque Vermelho Oficial) ═══
+          Medido: data value x=265-304, y=720-942 → left:38.3% top:75.4% w:5.8% h:23.4%
+          Corrigido: mais para o canto, descer, afastar da esquerda */}
+      <div
+        className={`absolute ${docGreen} flex items-center justify-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "75.5%", left: "38.0%", width: "4.0%", height: "23.0%" }}
+      >
+        {isComplete && profile.category ? (
+          <span
+            className="truncate leading-none text-[#c01818] text-[8.5px] text-center"
+            style={fontStyle}
+          >
+            {profile.category}
+          </span>
+        ) : null}
+      </div>
 
-        {/* ═══ CAMADA 13: Box 9 CAT HAB (Destaque Vermelho Oficial) ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center justify-center px-1 overflow-hidden z-10`}
-          style={{ top: "58.8%", left: "84.8%", width: "13.4%", height: "4.5%" }}
-        >
-          {isComplete && profile.category ? (
-            <span className="font-sans font-bold text-[#c01818] text-[2.6cqw] truncate leading-none text-center">
-              {profile.category}
-            </span>
-          ) : null}
-        </div>
+      {/* ═══ CAMADA 14: Box NACIONALIDADE ═══
+          Medido: data value x=195-232, y=265-942 → left:28.2% top:27.7% w:5.5% h:71.0%
+          Corrigido: descer sem sobrepor embaixo */}
+      <div
+        className={`absolute ${docGreen} flex items-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "27.8%", left: "28.0%", width: "4.0%", height: "70.5%" }}
+      >
+        {isComplete && profile.nationality ? (
+          <span
+            className="uppercase truncate leading-none text-black text-[8.5px]"
+            style={fontStyle}
+          >
+            {profile.nationality}
+          </span>
+        ) : null}
+      </div>
 
-        {/* ═══ CAMADA 14: Box NACIONALIDADE ═══ */}
-        <div
-          className={`absolute ${docGreen} flex items-center px-1 overflow-hidden z-10`}
-          style={{ top: "66.8%", left: "45.8%", width: "52.4%", height: "4.5%" }}
-        >
-          {isComplete && profile.nationality ? (
-            <span className="font-sans font-bold text-black text-[2.5cqw] uppercase truncate leading-none">
-              {profile.nationality}
-            </span>
-          ) : null}
-        </div>
-
-        {/* ═══ CAMADA 15: Box FILIAÇÃO (2 Linhas) ═══ */}
-        <div
-          className={`absolute ${docGreen} flex flex-col justify-around px-1 overflow-hidden z-10`}
-          style={{ top: "75.2%", left: "45.8%", width: "52.4%", height: "19.8%" }}
-        >
-          <div className="flex items-center min-h-[4.5%]">
-            {isComplete && line1Father ? (
-              <span className="font-sans font-bold text-black text-[2.4cqw] uppercase truncate leading-none">
-                {line1Father}
-              </span>
-            ) : null}
-          </div>
-          <div className="flex items-center min-h-[4.5%]">
-            {isComplete && line2Mother ? (
-              <span className="font-sans font-bold text-black text-[2.4cqw] uppercase truncate leading-none">
-                {line2Mother}
-              </span>
-            ) : null}
-          </div>
-        </div>
+      {/* ═══ CAMADA 15: Box FILIAÇÃO (2 Linhas) ═══
+          Medido: linha 1 x=135-174, y=260-942 → left:19.5% top:27.2% w:5.8% h:71.5%
+          Medido: linha 2 x=65-124, y=278-942 → left:9.4% top:29.1% w:8.7% h:69.6% */}
+      <div
+        className={`absolute ${docGreen} flex items-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "27.2%", left: "19.5%", width: "4.0%", height: "71.0%" }}
+      >
+        {isComplete && line1Father ? (
+          <span
+            className="uppercase truncate leading-none text-black text-[8px]"
+            style={fontStyle}
+          >
+            {line1Father}
+          </span>
+        ) : null}
+      </div>
+      <div
+        className={`absolute ${docGreen} flex items-center overflow-hidden z-10 [writing-mode:vertical-rl] rotate-180`}
+        style={{ top: "29.0%", left: "9.2%", width: "4.0%", height: "69.5%" }}
+      >
+        {isComplete && line2Mother ? (
+          <span
+            className="uppercase truncate leading-none text-black text-[8px]"
+            style={fontStyle}
+          >
+            {line2Mother}
+          </span>
+        ) : null}
       </div>
     </article>
   );
