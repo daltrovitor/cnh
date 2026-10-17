@@ -377,7 +377,7 @@ export function EditScreen({ profile, onBack, onSave }: Props) {
                 <FormInput
                   id="f-issueDate"
                   label="4a Data de Emissão"
-                  value={draft.issueDate || "06/01/2023"}
+                  value={draft.issueDate || ""}
                   error={errors.issueDate}
                   placeholder="DD/MM/AAAA"
                   onChange={(v) => update("issueDate", v)}
@@ -385,9 +385,9 @@ export function EditScreen({ profile, onBack, onSave }: Props) {
                 <FormInput
                   id="f-formNumber"
                   label="Nº Espelho / Formulário"
-                  value={draft.formNumber || "2519950272"}
+                  value={draft.formNumber || ""}
                   error={errors.formNumber}
-                  placeholder="2519950272"
+                  placeholder="Número do espelho"
                   onChange={(v) => update("formNumber", v)}
                   inputClassName="font-mono"
                 />

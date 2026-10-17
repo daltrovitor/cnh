@@ -91,7 +91,7 @@ export function CardScreen({
           className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto gap-8 px-6 mt-1 scroll-smooth"
           aria-roledescription="carrossel"
         >
-          <div className="w-full shrink-0 snap-center py-2 flex justify-center items-center">
+          <div className="w-full shrink-0 snap-center py-2 flex justify-center items-center min-h-[485px]">
             <CnhCardFront profile={profile} />
           </div>
           <div className="w-full shrink-0 snap-center py-2 flex justify-center items-center">
