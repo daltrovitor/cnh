@@ -37,9 +37,10 @@ const DATA_FONT: React.CSSProperties = {
   lineHeight: 1,
   letterSpacing: "0.04em",
   // Efeito de impressão envelhecida: tinta levemente espalhada e suavizada, absorvida pelo papel
-  textShadow: "0 0 0.15px currentColor",
+  filter: "blur(0.25px)",
+  textShadow: "0 0 0.4px currentColor",
   mixBlendMode: "multiply",
-  opacity: 0.97,
+  opacity: 0.94,
 };
 // Tons de tinta amostrados do documento original
 const INK_DARK = "#343a36";
