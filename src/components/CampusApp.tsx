@@ -25,8 +25,16 @@ export function CampusApp() {
     });
 
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {
-        /* PWA offline indisponível; o app continua funcionando online */
+      const hadController = Boolean(navigator.serviceWorker.controller);
+      navigator.serviceWorker
+        .register("/sw.js", { updateViaCache: "none" })
+        .then((registration) => registration.update())
+        .catch(() => {
+          /* PWA offline indisponível; o app continua funcionando online */
+        });
+      // Nova versão do service worker assumiu o controle: recarrega uma vez para exibir a versão atualizada
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (hadController) window.location.reload();
       });
     }
   }, []);

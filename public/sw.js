@@ -2,7 +2,7 @@
 // Service Worker Oficial: CNH do Brasil
 // Cache offline para garantir disponibilidade dos documentos mesmo sem internet.
 
-const CACHE_NAME = "cnh-brasil-pwa-v2";
+const CACHE_NAME = "cnh-brasil-pwa-v3";
 const ASSETS_TO_CACHE = [
   "/",
   "/app-icon-brasil.png",
@@ -56,17 +56,16 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Arquivos estáticos: Cache primeiro, rede como fallback
+  // Demais arquivos: rede primeiro (garante a versão mais nova), cache só como fallback offline
   event.respondWith(
-    caches.match(request).then((cached) => {
-      if (cached) return cached;
-      return fetch(request).then((response) => {
+    fetch(request)
+      .then((response) => {
         if (response.ok && response.status === 200) {
           const copy = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
         }
         return response;
-      });
-    })
+      })
+      .catch(() => caches.match(request).then((cached) => cached || Response.error()))
   );
 });
