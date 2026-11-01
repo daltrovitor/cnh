@@ -36,7 +36,15 @@ const DATA_FONT: React.CSSProperties = {
   fontSize: "2.6cqw",
   lineHeight: 1,
   letterSpacing: "0.04em",
+  // Efeito de impressão envelhecida: tinta levemente espalhada e suavizada, absorvida pelo papel
+  filter: "blur(0.45px) contrast(0.92)",
+  textShadow: "0 0 0.7px currentColor, 0.25px 0 0.5px currentColor",
+  mixBlendMode: "multiply",
+  opacity: 0.9,
 };
+// Tons de tinta amostrados do documento original
+const INK_DARK = "#343a36";
+const INK_RED = "#b2464a";
 
 type VerticalField = {
   key: string;
@@ -156,8 +164,8 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
         >
           {isComplete && value ? (
             <span
-              className={`whitespace-nowrap ${red ? "text-[#d22630]" : "text-[#2b2b2b]"}`}
-              style={DATA_FONT}
+              className="whitespace-nowrap"
+              style={{ ...DATA_FONT, color: red ? INK_RED : INK_DARK }}
             >
               {value}
             </span>
