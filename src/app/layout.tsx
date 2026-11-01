@@ -1,6 +1,6 @@
 // Hello World
 import type { Metadata, Viewport } from "next";
-import { Fira_Sans_Condensed, Montserrat } from "next/font/google";
+import { Source_Sans_3, Montserrat } from "next/font/google";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -9,11 +9,11 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
-// Fonte da impressão da CNH (humanista condensada, semibold)
-const cnhFont = Fira_Sans_Condensed({
+// Fonte da impressão da CNH (sans humanista, semibold) — identificada por comparação com o documento
+const cnhFont = Source_Sans_3({
   variable: "--font-cnh",
   subsets: ["latin"],
-  weight: ["500", "600"],
+  weight: ["600"],
   display: "swap",
 });
 

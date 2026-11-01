@@ -29,13 +29,13 @@ const px = (x0: number, x1: number, y0: number, y1: number): React.CSSProperties
 
 // Cor verde exata do papel atrás dos dados
 const DOC_GREEN = "#eaf5ee";
-// Tipografia idêntica à impressão: humanista condensada, semibold, altura de caixa ≈ 12px/692
+// Tipografia idêntica à impressão: Source Sans 3 semibold, altura de caixa ≈ 12px/692
 const DATA_FONT: React.CSSProperties = {
-  fontFamily: "var(--font-cnh), 'Fira Sans Condensed', 'Arial Narrow', sans-serif",
+  fontFamily: "var(--font-cnh), 'Source Sans 3', 'Segoe UI', sans-serif",
   fontWeight: 600,
-  fontSize: "2.5cqw",
+  fontSize: "2.6cqw",
   lineHeight: 1,
-  letterSpacing: "0.01em",
+  letterSpacing: "0.04em",
 };
 
 type VerticalField = {
@@ -164,21 +164,6 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
           ) : null}
         </div>
       ))}
-
-      {/* Categoria (letra grande ao lado do ACC) */}
-      <div
-        className="absolute z-10 flex items-center justify-center overflow-hidden [writing-mode:vertical-rl]"
-        style={{ ...px(361, 398, 866, 922), backgroundColor: DOC_GREEN }}
-      >
-        {isComplete && profile.category ? (
-          <span
-            className="text-[#1a1a1a]"
-            style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontWeight: 700, fontSize: "8.4cqw", lineHeight: 1 }}
-          >
-            {profile.category.trim().slice(-1).toUpperCase()}
-          </span>
-        ) : null}
-      </div>
     </article>
   );
 }
