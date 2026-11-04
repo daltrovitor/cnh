@@ -29,13 +29,14 @@ const px = (x0: number, x1: number, y0: number, y1: number): React.CSSProperties
 
 // Cor verde exata do papel atrás dos dados
 const DOC_GREEN = "#eaf5ee";
-// Tipografia idêntica à impressão: Source Sans 3 semibold, altura de caixa ≈ 12px/692
+// Tipografia do documento: Arial regular, traço levemente reforçado para igualar o peso da impressão
 const DATA_FONT: React.CSSProperties = {
-  fontFamily: "var(--font-cnh), 'Source Sans 3', 'Segoe UI', sans-serif",
-  fontWeight: 600,
-  fontSize: "2.6cqw",
+  fontFamily: "Arial, 'Helvetica Neue', Helvetica, sans-serif",
+  fontWeight: 400,
+  fontSize: "2.35cqw",
   lineHeight: 1,
-  letterSpacing: "0.04em",
+  letterSpacing: "0",
+  WebkitTextStroke: "0.25px currentColor",
 };
 // Tons de tinta amostrados do documento original
 const INK_DARK = "#343a36";
@@ -69,7 +70,7 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
   const fields: VerticalField[] = [
     { key: "name", box: [483, 503, 170, 455], value: profile.name.toUpperCase() },
     { key: "firstLicense", box: [483, 503, 790, 892], value: profile.firstLicenseDate ?? "" },
-    { key: "birth", box: [424, 445, 446, 745], value: birthText.toUpperCase() },
+    { key: "birth", box: [421, 447, 443, 750], value: birthText.toUpperCase() },
     { key: "issue", box: [367, 387, 444, 548], value: profile.issueDate ?? "" },
     { key: "valid", box: [368, 386, 618, 724], value: profile.validUntil ?? "", red: true },
     { key: "rg", box: [310, 329, 444, 660], value: (profile.rg ?? "").toUpperCase() },
