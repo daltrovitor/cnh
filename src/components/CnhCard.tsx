@@ -29,18 +29,33 @@ const px = (x0: number, x1: number, y0: number, y1: number): React.CSSProperties
 
 // Cor verde exata do papel atrás dos dados
 const DOC_GREEN = "#eaf5ee";
-// Tipografia do documento: Arial regular, traço levemente reforçado para igualar o peso da impressão
+// Tipografia do documento: Arial bold, caixa alta
 const DATA_FONT: React.CSSProperties = {
   fontFamily: "Arial, 'Helvetica Neue', Helvetica, sans-serif",
-  fontWeight: 400,
+  fontWeight: 700,
   fontSize: "2.35cqw",
   lineHeight: 1,
   letterSpacing: "0",
-  WebkitTextStroke: "0.25px currentColor",
 };
 // Tons de tinta amostrados do documento original
 const INK_DARK = "#343a36";
 const INK_RED = "#b2464a";
+
+/** Títulos dos campos redesenhados sobre o template: [texto, x0, x1, y0, y1] em pixels (692×955) */
+const LABELS: ReadonlyArray<readonly [string, number, number, number, number]> = [
+  ["2 E 1 NOME E SOBRENOME", 511, 521, 179, 327],
+  ["1ª HABILITAÇÃO", 511, 522, 790, 882],
+  ["3 DATA, LOCAL E UF DE NASCIMENTO", 453, 464, 443, 651],
+  ["4A DATA EMISSÃO", 395, 406, 443, 548],
+  ["4B VALIDADE", 396, 407, 620, 698],
+  ["4C DOC IDENTIDADE / ÓRG EMISSOR / UF", 337, 348, 443, 672],
+  ["4D CPF", 280, 291, 448, 488],
+  ["5 Nº REGISTRO", 280, 291, 643, 726],
+  ["9 CAT HAB", 280, 291, 810, 883],
+  ["NACIONALIDADE", 223, 234, 443, 542],
+  ["FILIAÇÃO", 163, 176, 450, 501],
+  ["7 ASSINATURA DO PORTADOR", 14, 27, 207, 373],
+];
 
 type VerticalField = {
   key: string;
@@ -135,7 +150,7 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
       </div>
 
       {/* Assinatura do portador — área branca */}
-      <div className="absolute z-10 overflow-hidden bg-white" style={px(27, 106, 164, 416)}>
+      <div className="absolute z-10 overflow-hidden bg-white" style={px(37, 106, 164, 416)}>
         {isComplete && profile.signature ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -144,7 +159,7 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
             className="absolute left-1/2 top-1/2 max-w-none object-contain"
             style={{
               width: `${bandHeightCqw}cqw`,
-              height: `${((106 - 27) / DOC_W) * 100}cqw`,
+              height: `${((106 - 37) / DOC_W) * 100}cqw`,
               transform: "translate(-50%, -50%) rotate(90deg)",
             }}
           />
@@ -168,6 +183,29 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
           ) : null}
         </div>
       ))}
+
+      {/* Títulos dos campos: máscara + texto em caixa alta e negrito, mesma tipografia dos dados */}
+      <svg
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-20 h-full w-full"
+        viewBox={`0 0 ${DOC_W} ${DOC_H}`}
+        preserveAspectRatio="none"
+      >
+        {LABELS.map(([text, x0, x1, y0, y1]) => (
+          <g key={text}>
+            <rect x={x0 - 2} y={y0 - 2} width={x1 - x0 + 4} height={y1 - y0 + 14} fill={DOC_GREEN} />
+            <text
+              transform={`translate(${(x0 + x1) / 2 - 3.2} ${y0}) rotate(90)`}
+              textLength={y1 - y0}
+              lengthAdjust="spacingAndGlyphs"
+              fill={INK_DARK}
+              style={{ fontFamily: "Arial, 'Helvetica Neue', Helvetica, sans-serif", fontWeight: 700, fontSize: 9.6 }}
+            >
+              {text}
+            </text>
+          </g>
+        ))}
+      </svg>
     </article>
   );
 }
