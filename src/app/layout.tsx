@@ -1,11 +1,19 @@
 // Hello World
 import type { Metadata, Viewport } from "next";
-import { Source_Sans_3, Montserrat } from "next/font/google";
+import { Montserrat, Poppins, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// Fonte do aplicativo (tela de entrada e início), igual à do app oficial
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -43,9 +51,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${montserrat.variable} ${cnhFont.variable} antialiased`} suppressHydrationWarning>
+    <html lang="pt-BR" className={`${montserrat.variable} ${poppins.variable} ${cnhFont.variable} antialiased`} suppressHydrationWarning>
       <body className="min-h-dvh bg-[#f8fafc] font-sans antialiased" suppressHydrationWarning>
         {children}
+        <div className="rotate-guard" role="alert">
+          Gire o aparelho para a vertical para continuar.
+        </div>
       </body>
     </html>
   );

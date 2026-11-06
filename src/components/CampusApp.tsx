@@ -24,6 +24,14 @@ export function CampusApp() {
       setProfile(persisted);
     });
 
+    // Trava a orientação na vertical onde o navegador permite (PWA instalado / Android)
+    const orientation = screen.orientation as ScreenOrientation & {
+      lock?: (orientation: "portrait") => Promise<void>;
+    };
+    orientation.lock?.("portrait").catch(() => {
+      /* sem suporte (ex.: iOS) ou fora de tela cheia: o aviso em CSS cobre este caso */
+    });
+
     if ("serviceWorker" in navigator) {
       const hadController = Boolean(navigator.serviceWorker.controller);
       navigator.serviceWorker

@@ -33,73 +33,63 @@ export function RoadCurves() {
   );
 }
 
-/** Ícone CONDUTOR: Condutor ao lado do carro (Image 4) */
-export function CondutorIcon({ className = "h-9 w-9 text-white drop-shadow-sm" }: { className?: string }) {
+const ICON_CLASS = "h-12 w-auto text-white drop-shadow-sm";
+
+/** Carro de lado, silhueta sólida com janelas e rodas vazadas */
+function CarSide({ x = 0, y = 0 }: { x?: number; y?: number }) {
   return (
-    <svg viewBox="0 0 64 48" className={className} fill="currentColor" aria-hidden>
-      {/* Condutor */}
-      <circle cx="15" cy="14" r="7" />
-      <path d="M4,34 C4,26 10,23 20,23 C23,23 26,24 28,26 L26,34 Z" />
-      {/* Carro ao lado */}
-      <path d="M26,28 C28,20 34,16 45,16 C54,16 58,20 60,26 L62,32 C63,33 63,35 61,35 L59,35 C58,38 55,40 52,40 C49,40 46,38 45,35 L33,35 C32,38 29,40 26,40 C23,40 20,38 19,35 L20,32 Z" />
-      {/* Rodas */}
-      <circle cx="26" cy="35" r="3.5" fill="currentColor" />
-      <circle cx="52" cy="35" r="3.5" fill="currentColor" />
-      {/* Farol / Para-brisa */}
-      <path d="M33,26 L38,20 L48,20 L53,26 Z" fill="white" fillOpacity="0.4" />
+    <g transform={`translate(${x} ${y})`}>
+      <path d="M2 30 L2 24 C2 21.5 3.5 20 6 19.5 L16 17 L23 8 C24 6.8 25.2 6.2 27 6.2 L41 6.2 C43 6.2 44.2 6.8 45.2 8 L51.5 17 L58 18.5 C60.5 19.2 62 21 62 23.5 L62 30 C62 31.2 61 32 60 32 L4 32 C2.9 32 2 31.2 2 30 Z" />
+      <path d="M20 17 L25.5 10 L33 10 L33 17 Z M36 10 L41 10 L46.5 17 L36 17 Z" fill="#000" fillOpacity="0.28" />
+      <circle cx="17" cy="32" r="6.2" />
+      <circle cx="49" cy="32" r="6.2" />
+      <circle cx="17" cy="32" r="2.6" fill="#000" fillOpacity="0.35" />
+      <circle cx="49" cy="32" r="2.6" fill="#000" fillOpacity="0.35" />
+    </g>
+  );
+}
+
+/** Ícone CONDUTOR: condutor ao lado do carro */
+export function CondutorIcon({ className = ICON_CLASS }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 92 40" className={className} fill="currentColor" aria-hidden>
+      <circle cx="12" cy="10" r="6.5" />
+      <path d="M0 36 C0 26 5 22 12 22 C19 22 24 26 24 36 Z" />
+      <CarSide x={28} />
     </svg>
   );
 }
 
-/** Ícone VEÍCULOS: Carro visto de frente (Image 4) */
-export function VeiculosIcon({ className = "h-9 w-9 text-white drop-shadow-sm" }: { className?: string }) {
+/** Ícone VEÍCULOS: carro de lado */
+export function VeiculosIcon({ className = ICON_CLASS }: { className?: string }) {
   return (
-    <svg viewBox="0 0 54 48" className={className} fill="currentColor" aria-hidden>
-      {/* Carroçaria frontal */}
-      <path d="M12,18 C15,10 20,8 27,8 C34,8 39,10 42,18 L46,24 C48,26 49,29 48,32 L47,38 C47,40 45,41 43,41 L41,41 C39,41 38,39 38,37 L16,37 C16,39 15,41 13,41 L11,41 C9,41 7,40 7,38 L6,32 C5,29 6,26 8,24 Z" />
-      {/* Para-brisa */}
-      <path d="M14,18 L18,12 L36,12 L40,18 Z" fill="white" fillOpacity="0.4" />
-      {/* Faróis */}
-      <circle cx="13" cy="27" r="3.5" fill="white" fillOpacity="0.9" />
-      <circle cx="41" cy="27" r="3.5" fill="white" fillOpacity="0.9" />
-      {/* Grade */}
-      <rect x="21" y="27" width="12" height="3" rx="1.5" fill="white" fillOpacity="0.6" />
-      {/* Pneus inferiores */}
-      <rect x="9" y="38" width="5" height="4" rx="1.5" />
-      <rect x="40" y="38" width="5" height="4" rx="1.5" />
+    <svg viewBox="0 0 64 40" className={className} fill="currentColor" aria-hidden>
+      <CarSide />
     </svg>
   );
 }
 
-/** Ícone INFRAÇÕES: Agente/policial com quepe ao lado do carro (Image 4) */
-export function InfracoesIcon({ className = "h-9 w-9 text-white drop-shadow-sm" }: { className?: string }) {
+/** Ícone INFRAÇÕES: agente com quepe ao lado do carro */
+export function InfracoesIcon({ className = ICON_CLASS }: { className?: string }) {
   return (
-    <svg viewBox="0 0 64 48" className={className} fill="currentColor" aria-hidden>
-      {/* Agente com Quepe */}
-      <ellipse cx="16" cy="11" rx="8" ry="2.5" />
-      <circle cx="16" cy="14" r="5.5" />
-      <path d="M6,34 C6,26 12,24 20,24 C23,24 26,25 28,27 L26,34 Z" />
-      {/* Carro */}
-      <path d="M26,28 C28,20 34,16 45,16 C54,16 58,20 60,26 L62,32 C63,33 63,35 61,35 L59,35 C58,38 55,40 52,40 C49,40 46,38 45,35 L33,35 C32,38 29,40 26,40 C23,40 20,38 19,35 L20,32 Z" />
-      <circle cx="26" cy="35" r="3.5" fill="currentColor" />
-      <circle cx="52" cy="35" r="3.5" fill="currentColor" />
-      {/* Giroflex */}
-      <rect x="42" y="13" width="5" height="3" rx="1" fill="white" fillOpacity="0.9" />
+    <svg viewBox="0 0 92 40" className={className} fill="currentColor" aria-hidden>
+      <path d="M4 7 C4 2.5 8 1 12 1 C16 1 20 2.5 20 7 L21 8.5 L3 8.5 Z" />
+      <circle cx="12" cy="14" r="5.5" />
+      <path d="M0 36 C0 27 5 23 12 23 C19 23 24 27 24 36 Z" />
+      <CarSide x={28} />
     </svg>
   );
 }
 
-/** Ícone EDUCAÇÃO: Instrutor/pessoa ao lado do quadro/tela (Image 4) */
-export function EducacaoIcon({ className = "h-9 w-9 text-white drop-shadow-sm" }: { className?: string }) {
+/** Ícone EDUCAÇÃO: pessoa em frente ao quadro/tela */
+export function EducacaoIcon({ className = ICON_CLASS }: { className?: string }) {
   return (
-    <svg viewBox="0 0 54 48" className={className} fill="currentColor" aria-hidden>
-      {/* Quadro / Monitor */}
-      <rect x="16" y="10" width="34" height="25" rx="3" fill="currentColor" />
-      <rect x="20" y="14" width="26" height="17" rx="1.5" fill="white" fillOpacity="0.35" />
-      <rect x="30" y="35" width="6" height="6" fill="currentColor" />
-      {/* Pessoa em frente */}
-      <circle cx="12" cy="22" r="5" />
-      <path d="M4,39 C4,32 8,30 16,30 C20,30 22,32 23,35 L23,39 Z" />
+    <svg viewBox="0 0 64 44" className={className} fill="currentColor" aria-hidden>
+      <rect x="20" y="4" width="42" height="28" rx="3" />
+      <rect x="24" y="8" width="34" height="20" rx="1.5" fill="#000" fillOpacity="0.25" />
+      <rect x="37" y="32" width="8" height="6" />
+      <circle cx="11" cy="20" r="6" />
+      <path d="M0 42 C0 32 5 29 12 29 C19 29 24 32 24 42 Z" />
     </svg>
   );
 }

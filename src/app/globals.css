@@ -20,7 +20,7 @@
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-navy: var(--navy);
-  --font-sans: var(--font-montserrat);
+  --font-sans: var(--font-poppins), var(--font-montserrat);
 }
 
 html,
@@ -53,6 +53,26 @@ label[for],
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Rotação bloqueada: em celulares deitados o app pede para voltar à vertical */
+.rotate-guard {
+  display: none;
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .rotate-guard {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #091d49;
+    color: #ffffff;
+    text-align: center;
+    font-weight: 600;
+  }
 }
 
 @keyframes screen-in {

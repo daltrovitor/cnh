@@ -1,9 +1,11 @@
 // Hello World
 "use client";
 
-import { ScanFace, ShieldCheck, X } from "lucide-react";
+import { ShieldCheck, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { hasRegisteredBiometric, isBiometricAvailable, verifyBiometric } from "@/lib/biometric";
+
+const DEFAULT_LABEL = "ENTRAR COM biometria";
 
 type LockState =
   | { status: "checking" }
@@ -45,7 +47,7 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
       ? "Verificando biometria…"
       : state.status === "ready" && !state.registered
         ? "Cadastrar biometria facial"
-        : "USAR BIOMETRIA FACIAL";
+        : DEFAULT_LABEL;
 
   return (
     <main className="screen-in relative flex min-h-dvh w-full flex-col justify-end overflow-hidden bg-slate-900 select-none">
@@ -55,30 +57,30 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
         <img
           src="/driver-bg-clean.png"
           alt="Condutora no trânsito"
-          className="h-full w-full object-cover object-center"
+          className="h-full w-full object-cover object-[center_15%]"
         />
         {/* Sombra sutil de profundidade */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30" />
       </div>
 
       {/* 2. Card inferior mais alto e arredondado sobre a imagem de fundo */}
-      <div className="relative z-10 flex w-full flex-col items-center justify-between rounded-t-[32px] bg-white px-6 pt-7 pb-[calc(2.2rem+env(safe-area-inset-bottom))] shadow-[0_-16px_40px_rgba(0,0,0,0.28)]">
+      <div className="relative z-10 flex w-full flex-col items-center justify-between min-h-[42dvh] rounded-t-[36px] bg-[#f0f0f1] px-7 pt-5 pb-[calc(2rem+env(safe-area-inset-bottom))] font-[family-name:var(--font-poppins)] shadow-[0_-12px_32px_rgba(0,0,0,0.18)]">
         <div className="flex w-full flex-col items-center text-center">
           {/* Logo Oficial: Bandeira do Brasil + CNH do BRASIL */}
           {/* eslint-disable-next-line @next/next/no-img-element -- ícone oficial fornecido pelo usuário */}
           <img
             src="/app-icon-brasil.png"
             alt="CNH do Brasil"
-            className="h-32 w-auto object-contain drop-shadow-sm transition-transform hover:scale-105"
+            className="h-[190px] w-auto object-contain mix-blend-multiply"
           />
 
           {/* Termos de Uso e Política de Privacidade */}
-          <p className="mt-3.5 max-w-[290px] text-xs font-medium text-slate-700 leading-relaxed">
+          <p className="mt-2 max-w-[330px] text-[15px] font-light text-slate-800 leading-snug">
             Ao entrar, você concorda com nosso{" "}
             <button
               type="button"
               onClick={() => setModalContent("terms")}
-              className="font-bold text-[#154fc9] hover:underline"
+              className="cursor-pointer font-semibold text-[#3a6fd8] underline underline-offset-2"
             >
               Termo de Responsabilidade
             </button>{" "}
@@ -86,7 +88,7 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
             <button
               type="button"
               onClick={() => setModalContent("privacy")}
-              className="font-bold text-[#154fc9] hover:underline"
+              className="cursor-pointer font-semibold text-[#3a6fd8] underline underline-offset-2"
             >
               Política de Privacidade
             </button>
@@ -99,20 +101,26 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
             <button
               type="button"
               onClick={onUnlock}
-              className="flex h-13 w-full items-center justify-center gap-2.5 rounded-full bg-[#154fc9] px-6 text-sm font-bold tracking-wider text-white shadow-lg shadow-blue-900/30 transition-transform active:scale-[0.98] hover:bg-[#1242ab]"
+              className="flex h-14 w-full cursor-pointer items-center justify-center rounded-full bg-[#1651c0] px-6 text-[15px] font-medium uppercase text-white shadow-[0_4px_10px_rgba(22,81,192,0.35)] transition-transform active:scale-[0.98] hover:bg-[#1242ab]"
             >
-              <ScanFace className="h-5 w-5" />
-              USAR BIOMETRIA FACIAL
+              ENTRAR COM&nbsp;<strong className="font-bold normal-case">biometria</strong>
             </button>
           ) : (
             <button
               type="button"
               onClick={handleUnlock}
               disabled={state.status !== "ready"}
-              className="flex h-13 w-full items-center justify-center gap-2.5 rounded-full bg-[#154fc9] px-6 text-sm font-bold tracking-wider text-white shadow-lg shadow-blue-900/30 transition-transform active:scale-[0.98] disabled:opacity-60 hover:bg-[#1242ab]"
+              className="flex h-14 w-full cursor-pointer items-center justify-center rounded-full bg-[#1651c0] px-6 text-[15px] font-medium uppercase text-white shadow-[0_4px_10px_rgba(22,81,192,0.35)] transition-transform active:scale-[0.98] hover:bg-[#1242ab] disabled:opacity-60"
             >
-              <ScanFace className="h-5 w-5 stroke-[2.2]" />
-              {state.status === "checking" ? "INICIANDO…" : label}
+              {state.status === "checking" ? (
+                "INICIANDO…"
+              ) : label === DEFAULT_LABEL ? (
+                <>
+                  ENTRAR COM&nbsp;<strong className="font-bold normal-case">biometria</strong>
+                </>
+              ) : (
+                label
+              )}
             </button>
           )}
 

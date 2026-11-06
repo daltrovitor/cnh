@@ -6,7 +6,7 @@
 
 export function GovLogos() {
   return (
-    <footer className="mt-auto flex w-full items-center justify-between gap-3 border-t border-slate-200/80 bg-[#f8f9fa] px-5 py-4 pb-[calc(1.2rem+env(safe-area-inset-bottom))] select-none">
+    <footer className="mt-auto flex w-full items-center justify-between gap-3 bg-[#efefef] px-5 py-5 pb-[calc(1.4rem+env(safe-area-inset-bottom))] select-none">
       {/* 1. Logo Serpro em Vetor SVG Ampliado */}
       <div className="flex shrink-0 items-center">
         <svg viewBox="0 0 115 32" className="h-8 w-auto fill-[#19234e]" aria-label="Serpro">
@@ -17,18 +17,10 @@ export function GovLogos() {
         </svg>
       </div>
 
-      {/* 2. Logo CNH do Brasil em Vetor SVG Ampliado */}
-      <div className="flex shrink-0 items-center">
-        <svg viewBox="0 0 120 34" className="h-8 w-auto" aria-label="CNH do Brasil">
-          <rect x="1" y="2" width="30" height="30" rx="7" fill="#15803d" />
-          <path d="M8 17 L14 23 L24 11" stroke="#facc15" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-          <text x="37" y="16" fontSize="10.5" fontWeight="900" fill="#19234e" fontFamily="system-ui, -apple-system, sans-serif" letterSpacing="0.2">
-            CNH DO
-          </text>
-          <text x="37" y="28" fontSize="11" fontWeight="900" fill="#15803d" fontFamily="system-ui, -apple-system, sans-serif" letterSpacing="0.2">
-            BRASIL
-          </text>
-        </svg>
+      {/* 2. CNH do BRASIL em texto, como no aplicativo oficial */}
+      <div className="flex shrink-0 items-baseline gap-1 font-[family-name:var(--font-poppins)]" aria-label="CNH do Brasil">
+        <span className="text-[13px] font-light text-slate-500">CNH do</span>
+        <span className="text-[13px] font-bold text-slate-600">BRASIL</span>
       </div>
 
       {/* 3. Logo Ministério dos Transportes + Governo Federal em Vetor SVG Ampliado */}

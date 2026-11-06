@@ -48,10 +48,10 @@ export function HomeScreen({
     rawFirstName.charAt(0).toUpperCase() + rawFirstName.slice(1).toLowerCase();
 
   return (
-    <div className="screen-in flex min-h-dvh flex-col bg-[#ffffff] select-none">
+    <div className="screen-in flex min-h-dvh flex-col bg-[#efefef] font-[family-name:var(--font-poppins)] select-none">
       {/* Topo Azul Marinho da Imagem 2 */}
-      <header className="bg-[#19234e] pt-[env(safe-area-inset-top)] text-white shadow-sm">
-        <div className="flex h-16 items-center justify-between px-3">
+      <header className="rounded-b-[28px] bg-[#091d49] pt-[env(safe-area-inset-top)] text-white">
+        <div className="flex h-[76px] items-center justify-between px-4">
           {/* Esquerda: 3 Barrinhas (Menu) + Primeiro Nome da Pessoa */}
           <div className="flex items-center gap-2">
             <button
@@ -61,9 +61,9 @@ export function HomeScreen({
               onClick={() => setMenuOpen(true)}
               className="flex h-11 w-11 items-center justify-center rounded-lg text-white hover:bg-white/10 active:scale-95 transition-transform"
             >
-              <Menu aria-hidden className="h-7 w-7 stroke-[2.4]" />
+              <Menu aria-hidden className="h-8 w-8 stroke-[3]" />
             </button>
-            <span className="text-[17px] font-bold text-white tracking-wide">
+            <span className="text-[17px] font-normal text-white">
               {firstName}
             </span>
           </div>
@@ -76,7 +76,7 @@ export function HomeScreen({
               onClick={() => setNotificationOpen(true)}
               className="flex h-11 w-11 items-center justify-center text-white hover:bg-white/10 rounded-lg active:scale-95 transition-transform"
             >
-              <Bell className="h-6 w-6 fill-white/10" />
+              <Bell aria-hidden className="h-6 w-6 fill-white" />
             </button>
 
             <button
@@ -85,7 +85,7 @@ export function HomeScreen({
               onClick={onOpenEditor}
               className="flex h-11 w-11 items-center justify-center rounded-full active:scale-95 transition-transform"
             >
-              <span className="flex h-9 w-9 overflow-hidden rounded-full border-2 border-white/80 bg-[#24336a] shadow-sm">
+              <span className="flex h-11 w-11 overflow-hidden rounded-full border-2 border-white/90 bg-[#24336a]">
                 {profile.photo ? (
                   // eslint-disable-next-line @next/next/no-img-element -- foto do condutor
                   <img src={profile.photo} alt="" className="h-full w-full object-cover" />
@@ -99,19 +99,19 @@ export function HomeScreen({
       </header>
 
       {/* Conteúdo Principal — Os 4 Botões Oficiais da CDT (Image 4 e Image 5) */}
-      <main className="flex flex-1 flex-col gap-3.5 px-4 pt-4 pb-4">
+      <main className="flex flex-1 flex-col gap-4 px-4 pt-4 pb-4">
         {/* 1. CONDUTOR (Verde) */}
         <button
           type="button"
           onClick={onOpenCard}
-          className="relative flex h-[106px] w-full items-center justify-between overflow-hidden rounded-2xl bg-[#179c52] px-5 text-left text-white shadow-md transition-all hover:brightness-105 active:scale-[0.98]"
+          className="relative flex h-[106px] w-full items-center justify-between overflow-hidden rounded-xl bg-[#1db266] pl-6 pr-5 text-left text-white shadow-[0_4px_8px_rgba(0,0,0,0.28)] transition-all hover:brightness-105 active:scale-[0.98]"
         >
           <RoadCurves />
           <div className="z-10 flex flex-col justify-center pr-2">
-            <span className="text-[19px] font-extrabold tracking-wide uppercase text-white leading-tight">
+            <span className="text-[19px] font-semibold uppercase text-white leading-tight">
               CONDUTOR
             </span>
-            <span className="mt-1 text-xs font-medium text-white/95 leading-snug">
+            <span className="mt-1 text-xs font-light text-white/95 leading-snug">
               Gerencie sua<br />habilitação
             </span>
           </div>
@@ -124,15 +124,15 @@ export function HomeScreen({
         <button
           type="button"
           onClick={onOpenCrlv}
-          className="relative flex h-[106px] w-full items-center justify-between overflow-hidden rounded-2xl bg-[#fabc2c] px-5 text-left shadow-md transition-all hover:brightness-105 active:scale-[0.98]"
+          className="relative flex h-[106px] w-full items-center justify-between overflow-hidden rounded-xl bg-[#fdc82f] pl-6 pr-5 text-left shadow-[0_4px_8px_rgba(0,0,0,0.28)] transition-all hover:brightness-105 active:scale-[0.98]"
         >
           <RoadCurves />
           <div className="z-10 flex flex-col justify-center pr-2">
-            <span className="text-[19px] font-extrabold tracking-wide uppercase text-[#19234e] leading-tight">
+            <span className="text-[19px] font-semibold uppercase text-[#0f1530] leading-tight">
               VEÍCULOS
             </span>
-            <span className="mt-1 text-xs font-medium text-[#19234e]/95 leading-snug">
-              Acesso ao <strong className="font-extrabold text-[#19234e]">CRLV-e</strong>,<br />venda digital
+            <span className="mt-1 text-xs font-light text-[#0f1530] leading-snug">
+              Acesso ao <strong className="font-semibold text-[#0f1530]">CRLV-e</strong>,<br />venda digital
             </span>
           </div>
           <div className="z-10 flex items-center justify-center pr-1">
@@ -148,15 +148,15 @@ export function HomeScreen({
               "Nenhuma infração registrada para a CNH ou veículo cadastrado no momento. Desconto de até 40% é aplicado automaticamente para pagamento antecipado pelo SNE."
             )
           }
-          className="relative flex h-[106px] w-full items-center justify-between overflow-hidden rounded-2xl bg-[#1c4897] px-5 text-left text-white shadow-md transition-all hover:brightness-105 active:scale-[0.98]"
+          className="relative flex h-[106px] w-full items-center justify-between overflow-hidden rounded-xl bg-[#243f9b] pl-6 pr-5 text-left text-white shadow-[0_4px_8px_rgba(0,0,0,0.28)] transition-all hover:brightness-105 active:scale-[0.98]"
         >
           <RoadCurves />
           <div className="z-10 flex flex-col justify-center pr-2">
-            <span className="text-[19px] font-extrabold tracking-wide uppercase text-white leading-tight">
+            <span className="text-[19px] font-semibold uppercase text-white leading-tight">
               INFRAÇÕES
             </span>
-            <span className="mt-1 text-xs font-medium text-white/95 leading-snug">
-              Visualize e pague infrações<br />com até <strong className="font-extrabold text-white">40% de desconto</strong>
+            <span className="mt-1 text-xs font-light text-white/95 leading-snug">
+              Visualize e pague infrações<br />com até <strong className="font-semibold text-white">40% de desconto</strong>
             </span>
           </div>
           <div className="z-10 flex items-center justify-center pr-1">
@@ -172,15 +172,15 @@ export function HomeScreen({
               "Plataforma de cursos oficiais da Secretaria Nacional de Trânsito (SENATRAN). Conteúdos de direção defensiva, legislação de trânsito e segurança viária."
             )
           }
-          className="relative flex h-[106px] w-full items-center justify-between overflow-hidden rounded-2xl bg-[#5da3d7] px-5 text-left shadow-md transition-all hover:brightness-105 active:scale-[0.98]"
+          className="relative flex h-[106px] w-full items-center justify-between overflow-hidden rounded-xl bg-[#62aeeb] pl-6 pr-5 text-left shadow-[0_4px_8px_rgba(0,0,0,0.28)] transition-all hover:brightness-105 active:scale-[0.98]"
         >
           <RoadCurves />
           <div className="z-10 flex flex-col justify-center pr-2">
-            <span className="text-[19px] font-extrabold tracking-wide uppercase text-[#19234e] leading-tight">
+            <span className="text-[19px] font-semibold uppercase text-[#0f1530] leading-tight">
               EDUCAÇÃO
             </span>
-            <span className="mt-1 text-xs font-medium text-[#19234e]/95 leading-snug">
-              Conheça nossa<br /><strong className="font-extrabold text-[#19234e]">plataforma de cursos</strong>
+            <span className="mt-1 text-xs font-light text-[#0f1530] leading-snug">
+              Conheça nossa<br /><strong className="font-semibold text-[#0f1530]">plataforma de cursos</strong>
             </span>
           </div>
           <div className="z-10 flex items-center justify-center pr-1">
