@@ -29,6 +29,8 @@ const px = (x0: number, x1: number, y0: number, y1: number): React.CSSProperties
 
 // Cor verde exata do papel atrás dos dados
 const DOC_GREEN = "#eaf5ee";
+// Esfumaça a borda das máscaras para a emenda com o papel não parecer um corte
+const FEATHER = `0 0 3px 2px ${DOC_GREEN}`;
 // Tipografia do documento: Arial bold, caixa alta
 const DATA_FONT: React.CSSProperties = {
   fontFamily: "Arial, 'Helvetica Neue', Helvetica, sans-serif",
@@ -117,7 +119,7 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
       {/* Nº do espelho (horizontal, canto superior esquerdo) */}
       <div
         className="absolute z-10 flex items-center overflow-hidden"
-        style={{ ...px(28, 296, 72, 116), backgroundColor: DOC_GREEN }}
+        style={{ ...px(28, 296, 72, 116), backgroundColor: DOC_GREEN, boxShadow: FEATHER }}
       >
         {isComplete && profile.formNumber ? (
           <span
@@ -132,7 +134,7 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
       {/* Foto do condutor — cobre toda a foto original, cabeça para a direita */}
       <div
         className="absolute z-10 overflow-hidden"
-        style={{ ...px(106, 452, 164, 416), backgroundColor: DOC_GREEN }}
+        style={{ ...px(106, 452, 164, 416), backgroundColor: DOC_GREEN, boxShadow: FEATHER }}
       >
         {isComplete && profile.photo ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -150,7 +152,7 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
       </div>
 
       {/* Assinatura do portador — área branca */}
-      <div className="absolute z-10 overflow-hidden bg-white" style={px(37, 106, 164, 416)}>
+      <div className="absolute z-10 overflow-hidden bg-white" style={{ ...px(37, 106, 164, 416), boxShadow: "0 0 3px 1px #ffffff" }}>
         {isComplete && profile.signature ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -171,7 +173,7 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
         <div
           key={key}
           className={`absolute z-10 flex items-center overflow-hidden [writing-mode:vertical-rl] ${center ? "justify-center" : "justify-start"}`}
-          style={{ ...px(...box), backgroundColor: DOC_GREEN, paddingTop: "0.3cqw" }}
+          style={{ ...px(...box), backgroundColor: DOC_GREEN, boxShadow: FEATHER, paddingTop: "0.3cqw" }}
         >
           {isComplete && value ? (
             <span
@@ -191,9 +193,14 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
         viewBox={`0 0 ${DOC_W} ${DOC_H}`}
         preserveAspectRatio="none"
       >
+        <defs>
+          <filter id="feather" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="1.4" />
+          </filter>
+        </defs>
         {LABELS.map(([text, x0, x1, y0, y1]) => (
           <g key={text}>
-            <rect x={x0 - 2} y={y0 - 2} width={x1 - x0 + 4} height={y1 - y0 + 14} fill={DOC_GREEN} />
+            <rect x={x0 - 1} y={y0 - 1} width={x1 - x0 + 2} height={y1 - y0 + 12} fill={DOC_GREEN} filter="url(#feather)" />
             <text
               transform={`translate(${(x0 + x1) / 2 - 3.2} ${y0}) rotate(90)`}
               textLength={y1 - y0}
