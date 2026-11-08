@@ -195,12 +195,14 @@ export function CnhCardFront({ profile }: { profile: Profile }) {
       >
         <defs>
           <filter id="feather" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="1.4" />
+            <feGaussianBlur stdDeviation="1" />
           </filter>
         </defs>
         {LABELS.map(([text, x0, x1, y0, y1]) => (
           <g key={text}>
-            <rect x={x0 - 1} y={y0 - 1} width={x1 - x0 + 2} height={y1 - y0 + 12} fill={DOC_GREEN} filter="url(#feather)" />
+            {/* franja externa esfumada + núcleo sólido que cobre todo o texto original */}
+            <rect x={x0 - 2.5} y={y0 - 2.5} width={x1 - x0 + 5} height={y1 - y0 + 17} fill={DOC_GREEN} filter="url(#feather)" />
+            <rect x={x0 - 1.5} y={y0 - 1.5} width={x1 - x0 + 3} height={y1 - y0 + 14} fill={DOC_GREEN} />
             <text
               transform={`translate(${(x0 + x1) / 2 - 3.2} ${y0}) rotate(90)`}
               textLength={y1 - y0}
